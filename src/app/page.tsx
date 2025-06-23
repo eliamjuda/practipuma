@@ -1,103 +1,158 @@
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+interface FeatureSectionProps {
+  title: string;
+  highlight: string;
+  description: string;
+  visual: React.ReactNode;
+  reverse?: boolean;
+}
+
+interface HeroSectionProps {
+  title: string;
+  highlight: string;
+  description: string;
+  ctaLabel: string;
+  // ctaHref: string;
+  visual: React.ReactNode;
+}
+
+type Stat = {
+  value: string;
+  label: string;
+};
+
+interface StatsBannerProps {
+  stats: Stat[];
+}
+
+export const StatsBanner: React.FC<StatsBannerProps> = ({ stats }) => {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <section className="w-full rounded-xl mb-40 bg-(--blue-main) md:px-8 md:py-6 flex flex-wrap justify-around text-center text-white font-bold">
+      {stats.map((stat, idx) => (
+        <div key={idx} className="m-4 p-10">
+          <p className="text-2xl md:text-4xl">{stat.value}</p>
+          <p className="text-sm md:text-base font-normal">{stat.label}</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+      ))}
+    </section>
+  );
+};
+
+export const HeroSection: React.FC<HeroSectionProps> = ({
+  title,
+  highlight,
+  description,
+  ctaLabel,
+  // ctaHref,
+  visual,
+}) => {
+  return (
+    <section className="flex flex-col md:flex-row items-center justify-between gap-8 py-20">
+      <div className="flex-1">
+        <h1 className="text-4xl md:text-5xl font-bold">
+          {title} <span>{highlight}</span>
+        </h1>
+        <p className="mt-4 max-w-md">{description}</p>
+        <Link href="#">
+          <Button className="mt-6">
+            {ctaLabel}
+          </Button>
+        </Link>
+      </div>
+
+      <div className="flex-1 p-[50px]">{visual}</div>
+    </section>
+  );
+};
+
+export const FeatureSection: React.FC<FeatureSectionProps> = ({
+  title,
+  highlight,
+  description,
+  visual,
+  reverse = false,
+}) => {
+  return (
+    <section className="flex flex-col md:flex-row items-center gap-8 justify-between py-16 mb-12">
+      <div className={`flex-1 ${reverse ? "order-2 md:order-1" : "order-2"}`}>
+        <h2 className="text-4xl md:text-5xl font-bold">
+          {title} <span>{highlight}</span>
+        </h2>
+        <p className="mt-4 max-w-lg">
+          {description}
+        </p>
+      </div>
+
+      <div className={`flex-1 ${reverse ? "order-1 md:order-2" : "order-1"}`}>
+        {visual} 
+      </div>
+    </section>
+  );
+};
+
+export default function LandingPage() {
+  return (
+    <main className="px-16 md:px-[20%]">
+      <HeroSection
+        title="Tu pase a la UNAM comienza"
+        highlight="aquí"
+        description="Haz del examen un trámite más. Domínalo con nuestra fórmula y el resto será solo celebrar tu ingreso."
+        ctaLabel="Comenzar a practicar"
+        // ctaHref="/practice"
+        visual={
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src="/images/illustrations/happyface.png"
+            alt="Aspirante seleccionado"
+            width={300}
+            height={300}
+            className="w-full h-auto"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        }
+      />
+
+      <StatsBanner
+        stats={[
+          { value: "+1500", label: "preguntas" },
+          { value: "69", label: "subtemas" },
+          { value: "+5", label: "modos de práctica" },
+          { value: "+2000", label: "usuarios al mes" },
+        ]}
+      />
+
+      <FeatureSection
+        title="¡Practica con más de"
+        highlight="1200 preguntas!"
+        description="PractiPuma te ofrece una experiencia de práctica inspirada en los temas, nivel y estilo del examen de admisión de la UNAM."
+        visual={
           <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+            src="/images/illustrations/gatito-escritorio-humano.png"
+            alt="¡Practica con más de 1200 preguntas!"
+            width={400}
+            height={400}
+            className=""
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        }
+      />
+
+      <FeatureSection
+        title="Practica que se adapta"
+        highlight="a tí"
+        description="Cada aspirante es único. Por eso, nuestra plataforma te ofrece un plan de estudio adaptado a tus necesidades y ritmo."
+        visual={
           <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            src="/images/illustrations/candado-pp.png"
+            alt="Plan de estudio personalizado"
+            width={400}
+            height={400}
+            className=""
+            />
+          }
+        reverse
+      />
+
+    </main>
   );
 }

@@ -1,26 +1,91 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --blue-main: #1367F1;
+  --blue-secondary: #043B93;
+  --shadow: #c7c7c7;
+  --text: #232627;
+  --principal-main-color: white;
+  --principal-secondary-color: #f7f7f7;
+
+  --red-main: #ffc4cd;
+  --red-secondary: #f7304d;
+  --green-main: #b7f1d3;
+  --green-secondary: #078f07;
+  --back-red: #a8061e;
+  --back-green: #055505;
+  --warning-orange-color: #fff7cc;
+  --warning-orange-border: #ffc341;
+
+  --premium-color-1: #070b55;
+  --premium-color-2: #043b93;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --blue-main: #1367F1;
+  --blue-secondary: #043B93;
+  --shadow: #c7c7c7;
+  --text: #232627;
+  --principal-main-color: white;
+  --principal-secondary-color: #f7f7f7;
+
+  --red-main: #ffc4cd;
+  --red-secondary: #f7304d;
+  --green-main: #b7f1d3;
+  --green-secondary: #078f07;
+  --back-red: #a8061e;
+  --back-green: #055505;
+  --warning-orange-color: #fff7cc;
+  --warning-orange-border: #ffc341;
+
+  --premium-color-1: #070b55;
+  --premium-color-2: #043b93;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --blue-main: #1367F1;
+    --blue-secondary: #043B93;
+    --shadow: #373535;
+    --text: #F3F5F7;
+    --principal-main-color: #141618;
+    --principal-secondary-color: #1B1D1F;
+
+    --red-main: #2C1A1A;
+    --red-secondary: #DC26;
+    --green-main: #0C311E;
+    --green-secondary: #20F420;
+    --back-red: #A8061E;
+    --back-green: #055505;
+    --warning-orange-color: #76500B;
+    --warning-orange-border: #B28F1C;
+
+    --premium-color-1: #070b55;
+    --premium-color-2: #043b93;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--principal-main-color);
+  color: var(--text);
+  font-family: "Baloo Bhaijaan 2", sans-serif;
+}
+
+button, a, input, textarea {
+  font-family: "Baloo Bhaijaan 2", sans-serif;
+  font-optical-sizing: auto;
+}
+
+span {
+  color: var(--blue-main);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.025em;
+  text-wrap: pretty;
+}
+
+p {
+  text-wrap: pretty;
+  /* font-size: 1rem; */
 }

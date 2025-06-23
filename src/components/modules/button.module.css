@@ -1,0 +1,52 @@
+
+.button {
+  --_fg: #1367F1;
+  --_bg: #043b93;
+  --_y: -4px;
+  
+  appearance: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-optical-sizing: auto;
+  isolation: isolate;
+  font-size: 16px;
+  color: white;
+  line-height: 1.5;
+  font-weight: 600;
+  border-radius: 8px;
+  background: var(--_bg);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.button::after {
+  content: attr(aria-label);
+  color: white;
+  padding: 12px 48px;
+  border-radius: inherit;
+  background: var(--_fg);
+  border: 2px solid var(--_bg);
+  transform: translateY(var(--_y));
+  transition: 200ms ease-out;
+}
+
+.button:hover {
+  --_y: -8px;
+}
+
+.button:active {
+  --_y: 2px;
+}
+
+.button:active::after {
+  transition: 50ms ease-out;
+}
+
+.button:focus-visible {
+  outline-color: black;
+}
