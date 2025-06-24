@@ -1,19 +1,20 @@
-const config = {
-  plugins: ["@tailwindcss/postcss"],
-};
-
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 import plugin from 'tailwindcss/plugin';
 
-module.exports = {
+// Plugin personalizado para rotar elementos
+const rotatePlugin = plugin(function ({ addUtilities }) {
+  addUtilities({
+    '.rotar-45': {
+      transform: 'rotate(45deg)',
+    },
+  });
+});
+
+export default {
   plugins: [
-    plugin(function ({ addUtilities }) {
-      addUtilities({
-        '.rotar-45': {
-          transform: 'rotate(45deg)',
-        },
-      });
-    }),
+    tailwindcss,      // TailwindCSS estándar
+    autoprefixer,     // Autoprefixer (para compatibilidad con navegadores)
+    rotatePlugin,     // Tu plugin personalizado
   ],
 };
-
-export default config;
