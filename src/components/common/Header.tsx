@@ -12,7 +12,6 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
 
@@ -23,7 +22,6 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
     // Prioridad: localStorage > light mode por defecto
     const shouldUseDarkMode = savedTheme === 'dark' || (savedTheme === null && false); // Cambié a false para light por defecto
     
-    setIsDarkMode(shouldUseDarkMode);
     
     if (shouldUseDarkMode) {
       document.documentElement.classList.add('dark');
