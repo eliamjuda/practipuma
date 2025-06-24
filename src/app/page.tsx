@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
+const numberOfQuestions = 1500; // Example value, replace with actual data
+
 interface FeatureSectionProps {
   title: string;
   highlight: string;
@@ -30,13 +32,31 @@ interface StatsBannerProps {
 
 export const StatsBanner: React.FC<StatsBannerProps> = ({ stats }) => {
   return (
-    <section className="w-full rounded-xl mb-40 bg-(--blue-main) md:px-8 md:py-6 flex flex-wrap justify-around text-center text-white font-bold">
-      {stats.map((stat, idx) => (
-        <div key={idx} className="m-4 p-10">
-          <p className="text-2xl md:text-4xl">{stat.value}</p>
-          <p className="text-sm md:text-base font-normal">{stat.label}</p>
-        </div>
-      ))}
+    <section className="w-full rounded-xl md:p-7 mb-20 md:mb-40 bg-(--blue-main) text-white font-bold overflow-hidden">
+      {/* Mobile: Grid 2x2 */}
+      <div className="grid grid-cols-2 md:hidden">
+        {stats.map((stat, idx) => (
+          <div 
+            key={idx} 
+            className={`p-6 text-center border-r border-b border-(--blue-main) last:border-r-0 ${
+              idx >= 2 ? 'border-b-0' : ''
+            } ${idx % 2 === 1 ? 'border-r-0' : ''}`}
+          >
+            <p className="text-2xl font-bold mb-1">{stat.value}</p>
+            <p className="text-xs font-normal opacity-90 leading-tight">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: Flex horizontal */}
+      <div className="hidden md:flex justify-around py-6 px-8">
+        {stats.map((stat, idx) => (
+          <div key={idx} className="text-center">
+            <p className="text-4xl font-bold mb-2">{stat.value}</p>
+            <p className="text-base font-normal opacity-90">{stat.label}</p>
+          </div>
+        ))}
+      </div>
     </section>
   );
 };
@@ -50,20 +70,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   visual,
 }) => {
   return (
-    <section className="flex flex-col md:flex-row items-center justify-between gap-8 py-20">
-      <div className="flex-1">
+    <section className="flex flex-col md:flex-row items-center justify-between md:gap-8 py-20">
+      {/* Contenido de texto */}
+      <div className="flex-1 order-2 md:order-1 text-center md:text-left">
         <h1 className="text-4xl md:text-5xl font-bold">
           {title} <span>{highlight}</span>
         </h1>
-        <p className="mt-4 max-w-md">{description}</p>
-        <Link href="#">
-          <Button className="mt-6">
-            {ctaLabel}
-          </Button>
-        </Link>
+        <p className="mt-4 max-w-md mx-auto md:mx-0">{description}</p>
+          <div className="mt-2 flex justify-center md:justify-start">
+            <Button className="mt-6">
+              {ctaLabel}
+            </Button>
+          </div>
       </div>
 
-      <div className="flex-1 p-[50px]">{visual}</div>
+      <div className="flex-1 order-1 md:order-2 w-full flex justify-center">
+        <div className="w-full max-w-[280px] md:max-w-none">
+          {visual}
+        </div>
+      </div>
     </section>
   );
 };
@@ -77,11 +102,11 @@ export const FeatureSection: React.FC<FeatureSectionProps> = ({
 }) => {
   return (
     <section className="flex flex-col md:flex-row items-center gap-8 justify-between py-16 mb-12">
-      <div className={`flex-1 ${reverse ? "order-2 md:order-1" : "order-2"}`}>
+      <div className={`flex-1 ${reverse ? "order-2 md:order-1" : "order-2"} text-center md:text-left`}>
         <h2 className="text-4xl md:text-5xl font-bold">
           {title} <span>{highlight}</span>
         </h2>
-        <p className="mt-4 max-w-lg">
+        <p className="mt-4 max-w-lg md:mr-10">
           {description}
         </p>
       </div>
@@ -95,7 +120,7 @@ export const FeatureSection: React.FC<FeatureSectionProps> = ({
 
 export default function LandingPage() {
   return (
-    <main className="px-16 md:px-[20%]">
+    <main className="px-12 md:px-[20%]">
       <HeroSection
         title="Tu pase a la UNAM comienza"
         highlight="aquí"
@@ -106,8 +131,8 @@ export default function LandingPage() {
           <Image
             src="/images/illustrations/happyface.png"
             alt="Aspirante seleccionado"
-            width={300}
-            height={300}
+            width={400}
+            height={400}
             className="w-full h-auto"
           />
         }
@@ -115,7 +140,7 @@ export default function LandingPage() {
 
       <StatsBanner
         stats={[
-          { value: "+1500", label: "preguntas" },
+          { value: `${numberOfQuestions}`, label: "preguntas" },
           { value: "69", label: "subtemas" },
           { value: "+5", label: "modos de práctica" },
           { value: "+2000", label: "usuarios al mes" },
@@ -124,12 +149,12 @@ export default function LandingPage() {
 
       <FeatureSection
         title="¡Practica con más de"
-        highlight="1200 preguntas!"
+        highlight={`${numberOfQuestions} preguntas!`}
         description="PractiPuma te ofrece una experiencia de práctica inspirada en los temas, nivel y estilo del examen de admisión de la UNAM."
         visual={
           <Image
             src="/images/illustrations/gatito-escritorio-humano.png"
-            alt="¡Practica con más de 1200 preguntas!"
+            alt={`¡Practica con más de ${numberOfQuestions} preguntas!` }
             width={400}
             height={400}
             className=""

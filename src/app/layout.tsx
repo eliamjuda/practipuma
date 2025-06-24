@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Baloo_Bhaijaan_2} from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/common/Header";
+import { ThemeProvider } from "next-themes";
 
 const baloo = Baloo_Bhaijaan_2({
   variable: "--font-baloo",
@@ -23,7 +25,14 @@ export default function RootLayout({
       <body
         className={`${baloo.variable} ${baloo.variable} antialiased`}
       >
+      <ThemeProvider 
+          attribute="class" 
+          defaultTheme="system" 
+          enableSystem={true}   
+      >
+        <Header/>
         {children}
+      </ThemeProvider>
       </body>
     </html>
   );

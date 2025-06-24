@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* 🎨 Valores por defecto */
 :root {
   --blue-main: #1367F1;
   --blue-secondary: #043B93;
@@ -21,7 +22,8 @@
   --premium-color-2: #043b93;
 }
 
-@theme inline {
+/* 🌞 Light theme forzado */
+html.light {
   --blue-main: #1367F1;
   --blue-secondary: #043B93;
   --shadow: #c7c7c7;
@@ -42,29 +44,29 @@
   --premium-color-2: #043b93;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --blue-main: #1367F1;
-    --blue-secondary: #043B93;
-    --shadow: #373535;
-    --text: #F3F5F7;
-    --principal-main-color: #141618;
-    --principal-secondary-color: #1B1D1F;
+/* 🌙 Dark theme forzado */
+html.dark {
+  --blue-main: #1367F1;
+  --blue-secondary: #043B93;
+  --shadow: #373535;
+  --text: #F3F5F7;
+  --principal-main-color: #141618;
+  --principal-secondary-color: #1B1D1F;
 
-    --red-main: #2C1A1A;
-    --red-secondary: #DC26;
-    --green-main: #0C311E;
-    --green-secondary: #20F420;
-    --back-red: #A8061E;
-    --back-green: #055505;
-    --warning-orange-color: #76500B;
-    --warning-orange-border: #B28F1C;
+  --red-main: #2C1A1A;
+  --red-secondary: #DC26;
+  --green-main: #0C311E;
+  --green-secondary: #20F420;
+  --back-red: #A8061E;
+  --back-green: #055505;
+  --warning-orange-color: #76500B;
+  --warning-orange-border: #B28F1C;
 
-    --premium-color-1: #070b55;
-    --premium-color-2: #043b93;
-  }
+  --premium-color-1: #070b55;
+  --premium-color-2: #043b93;
 }
 
+/* 🌐 Comunes */
 body {
   background: var(--principal-main-color);
   color: var(--text);
