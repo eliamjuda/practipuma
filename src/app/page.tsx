@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
 
 const numberOfQuestions = 1500; // Example value, replace with actual data
 

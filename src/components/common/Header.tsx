@@ -19,7 +19,6 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
   // Efecto para inicializar el tema desde localStorage o usar light por defecto
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     // Prioridad: localStorage > light mode por defecto
     const shouldUseDarkMode = savedTheme === 'dark' || (savedTheme === null && false); // Cambié a false para light por defecto
@@ -50,22 +49,6 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
   // Toggle mobile menu
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  // Toggle theme
-  const toggleTheme = () => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    
-    // Guardar preferencia en localStorage
-    localStorage.setItem('theme', newDarkMode ? 'dark' : 'light');
-    
-    // Aplicar clase al documento
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
   };
 
   // Close menu when clicking outside
