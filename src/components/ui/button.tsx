@@ -1,5 +1,6 @@
 "use client";
 
+import useSound from "use-sound";
 import styles from "@/components/modules/button.module.css";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -14,11 +15,19 @@ export const Button: React.FC<ButtonProps> = ({
   className = "",
   ...props 
 }) => {
+
+  const [playClick] = useSound("/sounds/pop.mp3", {
+    volume: 0.3, 
+  });
+
   return (
     <button 
       className={`${styles.button} ${className}`}
       aria-label={typeof children === 'string' ? children : 'Button'}
-      onClick={onClick}
+      onClick={(event) => {
+        playClick(); 
+        onClick?.(event); // llama tu lógica si existe
+      }}
       {...props}
     >
     </button>
