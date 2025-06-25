@@ -25,6 +25,7 @@
 }
 
 .button::after {
+  width: 100%;
   content: attr(aria-label);
   color: white;
   padding: 12px 48px;
