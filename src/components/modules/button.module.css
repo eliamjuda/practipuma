@@ -52,8 +52,63 @@
   outline-color: black;
 }
 
+/* --------------------------- BOTÓN PREMIUM --------------------------- */
+
+.premium {
+  --_fg: #1367F1;
+  --_bg: #043b93;
+  --_y: -4px;
+  
+  appearance: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-optical-sizing: auto;
+  isolation: isolate;
+  font-size: 16px;
+  color: white;
+  line-height: 1.5;
+  font-weight: 600;
+  border-radius: 8px;
+  background: white;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.premium::after {
+  width: 100%;
+  content: attr(aria-label);
+  color: white;
+  padding: 12px 48px;
+  border-radius: inherit;
+  background: linear-gradient(180deg,rgba(4, 59, 147, 1) 0%, rgba(7, 11, 85, 1) 60%);
+  border: 2px solid white;
+  transform: translateY(var(--_y));
+  transition: 200ms ease-out;
+}
+
+.premium:hover {
+  --_y: -8px;
+}
+
+.premium:active {
+  --_y: 2px;
+}
+
+.premium:active::after {
+  transition: 50ms ease-out;
+}
+
+.premium:focus-visible {
+  outline-color: black;
+}
+
 @media (max-width: 600px) {
-  .button {
+  .button, .premium {
     font-size: 15px;
   }
 }

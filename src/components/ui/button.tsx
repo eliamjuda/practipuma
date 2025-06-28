@@ -7,12 +7,14 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
+  variant?: "normal" | "premium";
 }
 
 export const Button: React.FC<ButtonProps> = ({ 
   children = "Practicar", 
   onClick, 
   className = "",
+  variant,
   ...props 
 }) => {
 
@@ -22,7 +24,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button 
-      className={`${styles.button} ${className}`}
+      className={`${className} ${variant === 'premium' ? styles.premium : styles.button}`}
       aria-label={typeof children === 'string' ? children : 'Button'}
       onClick={(event) => {
         playClick(); 
