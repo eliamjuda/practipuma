@@ -1,3 +1,4 @@
+import { PracticeCardProps } from "@/types/dashboard";
 
 export const PracticeCard = ({ item }: PracticeCardProps) => {
 

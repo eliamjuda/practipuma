@@ -11,6 +11,22 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      // Activa la regla para variables no utilizadas
+      '@typescript-eslint/no-unused-vars': 'error',
+      
+      // O con opciones más específicas:
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',        // Ignora argumentos que empiecen con _
+          varsIgnorePattern: '^_',        // Ignora variables que empiecen con _
+          caughtErrorsIgnorePattern: '^_' // Ignora errores capturados que empiecen con _
+        }
+      ]
+    }
+  }
 ];
 
 export default eslintConfig;

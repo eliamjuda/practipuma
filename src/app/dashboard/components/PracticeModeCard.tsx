@@ -1,3 +1,4 @@
+import { PracticeModeProps } from "@/types/dashboard";
 
 export const PracticeModeCard = ({ isPremium, mode }: PracticeModeProps) => {
   const isLocked = mode.premium && !isPremium;

@@ -1,4 +1,4 @@
-type PracticeModeCardProps = {
+export type PracticeModeCardProps = {
     id: number;
     title: string;
     subtitle: string;
@@ -10,12 +10,12 @@ type PracticeModeCardProps = {
 
 
 
-type PracticeModeProps = {
+export type PracticeModeProps = {
     isPremium: boolean;
     mode: PracticeModeCardProps
 }
 
-type PracticeCardProps = {
+export type PracticeCardProps = {
     item : {
         id: number,
         title: string,
