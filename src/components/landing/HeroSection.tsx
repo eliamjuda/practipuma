@@ -24,7 +24,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Contenido de texto */}
       <div className="flex-1 order-2 md:order-1 text-center md:text-left">
         <h1 className="text-4xl md:text-5xl font-bold">
-          {title} <span>{highlight}</span>
+          {title} <span className="span-pp">{highlight}</span>
         </h1>
         <p className="mt-4 max-w-md mx-auto md:mx-0">{description}</p>
           <div className="mt-2 flex justify-center md:justify-start">

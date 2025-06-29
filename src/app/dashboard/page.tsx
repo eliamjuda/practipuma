@@ -104,7 +104,7 @@ const PracticeDashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="mb-2">Hola, <span className="font-semibold">Eliam</span></p>
+              <p className="mb-2">Hola, <span className="span-pp font-semibold">Eliam</span></p>
               <h1 className="text-2xl md:text-3xl font-bold">¡Comencemos a practicar! 😎</h1>
             </div>
             
@@ -117,12 +117,12 @@ const PracticeDashboard = () => {
                 }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  className={`span-pp inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                     isPremium ? 'translate-x-6' : 'translate-x-1'
                   }`}
                 />
               </button>
-              <span className="text-sm">Premium</span>
+              <span className="text-sm span-pp">Premium</span>
             </div>
           </div>
         </div>
@@ -155,7 +155,7 @@ const PracticeDashboard = () => {
             {/* Practice Modes Grid */}
             <div className={`mb-8 mt-24 ${isPremium ? 'order-2' : ''}`}>
               <h2 className="text-xl font-semibold mb-4">
-                Modos de <span>práctica</span>
+                Modos de <span className='span-pp'>práctica</span>
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {practiceModesData.map((mode) => (
@@ -167,7 +167,7 @@ const PracticeDashboard = () => {
             <div className="mb-8 mt-24">
               <div className="flex items-center space-x-2 mb-4">
                 <h2 className="text-xl font-semibold">
-                  Practica a <span>tu medida</span>
+                  Practica a <span className='span-pp'>tu medida</span>
                 </h2>
                 {!isPremium && (
                   <p className="bg-[linear-gradient(322deg,_rgba(4,59,147,1)_0%,_rgba(7,11,85,1)_60%)] text-white px-2 py-1 text-xs font-bold rounded">
@@ -188,7 +188,7 @@ const PracticeDashboard = () => {
                 <div className=" rounded-lg py-8 px-24 border border-(--shadow)">
                   <p className="text-center mb-4">
                     Aquí aparecerán tus sesiones de práctica personalizadas, basadas en tu rendimiento, dificultades, o para más fácil:
-                    <span className="font-semibold"> enfocadas 100% en tí</span>
+                    <span className="span-pp font-semibold"> enfocadas 100% en tí</span>
                   </p>
                   <p className="text-center">
                     <button className="text-(--blue-main) hover:text-(--blue-secondary) font-bold underline text-sm cursor-pointer">
