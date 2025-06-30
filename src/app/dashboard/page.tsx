@@ -14,7 +14,7 @@ const PracticeDashboard = () => {
     {
       id: 1,
       title: "Reforzamiento",
-      subtitle: "Tienes dificultades al escribir bajo en matemáticas, repasémelo",
+      subtitle: "Hemos detectado un rendimiento bajo en matemáticas, repasémoslo",
       subject: "Matemáticas",
       priority: "Prioridad alta",
       color: "bg-orange-500",
@@ -22,8 +22,8 @@ const PracticeDashboard = () => {
     },
     {
       id: 2,
-      title: "Mindfulness",
-      subtitle: "¿Cómo sufrir menos? Una ráfaga de dos días para practicar la historia universal",
+      title: "Pendientes",
+      subtitle: "¿Odias a Historia Universal? llevas 20 días sin practicarla 🥲",
       subject: "Historia universal",
       priority: "Urgente",
       color: "bg-purple-600",
@@ -32,7 +32,7 @@ const PracticeDashboard = () => {
     {
       id: 3,
       title: "Revisión",
-      subtitle: "Ya es hora de que volvamos a practicar Biología",
+      subtitle: "Ya es hora de que volvamos a practicar Biología ⏰",
       priority: "Urgente",
       subject: "Biología",
       color: "bg-green-600",
@@ -129,7 +129,7 @@ const PracticeDashboard = () => {
 
         {/* Unrestricted Practice Section */}
         {!isPremium && (
-            <div className="mb-8">
+            <div className="mb-0 md:mb-8">
             <div className="flex items-center bg-gradient-to-b from-(--premium-color-2) to-(--premium-color-1) text-white p-8 rounded-4xl shadow-lg w-full">
                 <div className='flex-1 flex-col content-center text-center md:text-left'>
                     <h2 className="text-xl font-semibold mb-2">Practica sin restricciones</h2>
@@ -153,7 +153,7 @@ const PracticeDashboard = () => {
 
         <div className='flex flex-col'>
             {/* Practice Modes Grid */}
-            <div className={`mb-8 mt-24 ${isPremium ? 'order-2' : ''}`}>
+            <div className={`mb-8 md:mt-24 mt-12 ${isPremium ? 'order-2' : ''}`}>
               <h2 className="text-xl font-semibold mb-4">
                 Modos de <span className='span-pp'>práctica</span>
               </h2>
@@ -164,7 +164,7 @@ const PracticeDashboard = () => {
               </div>
             </div>
             {/* Custom Practice Section */}
-            <div className="mb-8 mt-24">
+            <div className="mb-8 md:mt-24 mt-1">
               <div className="flex items-center space-x-2 mb-4">
                 <h2 className="text-xl font-semibold">
                   Practica a <span className='span-pp'>tu medida</span>
@@ -185,7 +185,7 @@ const PracticeDashboard = () => {
                   ))}
                 </div>
               ) : (
-                <div className=" rounded-lg py-8 px-24 border border-(--shadow)">
+                <div className=" rounded-lg py-8 px-4 md:px-24 border border-(--shadow)">
                   <p className="text-center mb-4">
                     Aquí aparecerán tus sesiones de práctica personalizadas, basadas en tu rendimiento, dificultades, o para más fácil:
                     <span className="span-pp font-semibold"> enfocadas 100% en tí</span>

@@ -68,8 +68,8 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
 
   return (
     <header className={`w-full bg-(--principal-main-color) md:px-[20%] sticky top-0 z-50 ${
-  hasScrolled ? 'border-b-2 border-(--shadow)' : 'border-b-2 border-transparent'
-} transition-colors duration-300 ${className}`}>
+        hasScrolled ? 'border-b-2 border-(--shadow)' : 'border-b-2 border-transparent'
+      } transition-colors duration-300 ${className}`}>
       <div className="px-4 md:px-0">
         <div className="flex items-center justify-between h-16 md:h-20">
           
@@ -142,9 +142,11 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
             <ThemeToggle/>
 
             {/* CTA Button */}
-            <Button className="ml-4">
-              Practicar
-            </Button>
+            <Link href="/dashboard">
+              <Button className="ml-4">
+                Practicar
+              </Button>
+            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -223,11 +225,11 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
             </div>
 
             <div className="pt-6 px-4">
-              <Button 
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Comenzar a Practicar
+            <Link href="/dashboard">
+              <Button onClick={() => setIsMenuOpen(false)} className="ml-4">
+                Practicar
               </Button>
+            </Link>
             </div>
           </nav>
         </div>

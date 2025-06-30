@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Baloo_Bhaijaan_2} from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/common/Header";
+// import { Header } from "@/components/common/Header";
 import { ThemeProvider } from "next-themes";
+// import { PageTransition } from "@/components/common/PageTransitions";
 
 const baloo = Baloo_Bhaijaan_2({
   variable: "--font-baloo",
@@ -30,8 +31,10 @@ export default function RootLayout({
           defaultTheme="system" 
           enableSystem={true}   
       >
-        <Header/>
-        {children}
+        {/* <Header/> */}
+        {/* <PageTransition> */}
+          {children}
+        {/* </PageTransition> */}
       </ThemeProvider>
       </body>
     </html>

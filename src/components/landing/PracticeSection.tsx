@@ -51,17 +51,21 @@ export const PracticeSection: React.FC<PracticeSectionProps> = ({
               <button 
                 onClick={() => setCurrentSlide(Math.max(0, currentSlide - 1))}
                 disabled={currentSlide === 0}
-                className="p-2 cursor-pointer w-[50px] rounded-[10px] border-2 border-(--shadow) hover:bg-(--shadow) disabled:opacity-50 transition-all duration-300"
+                className="p-2 cursor-pointer w-[50px] rounded-[10px] border-2 border-(--shadow) hover:bg-(--shadow) disabled:opacity-50 text-(--text) transition-all duration-300"
               >
-                ←
+                <p className="text-(--text)">
+                  ←
+                </p>
               </button>
               <p className="text-(--text)">{currentSlide + 1}/{maxSlides}</p>
               <button 
                 onClick={() => setCurrentSlide(Math.min(maxSlides - 1, currentSlide + 1))}
                 disabled={currentSlide === maxSlides - 1}
-                className="p-2 cursor-pointer w-[50px] rounded-[10px] border-2 border-(--shadow) hover:bg-gray-700 disabled:opacity-50 transition-all duration-300"
+                className="p-2 cursor-pointer w-[50px] rounded-[10px] border-2 border-(--shadow) hover:bg-(--shadow) disabled:opacity-50 transition-all duration-300"
               >
-                →
+                <p className="text-(--text)">
+                  →
+                </p>
               </button>
             </div>
 
