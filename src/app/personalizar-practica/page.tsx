@@ -12,6 +12,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { PageTransition } from '@/components/common/PageTransitions';
+import { useSearchParams } from 'next/navigation';
+import { practiceModeDecoration, practiceModesData } from '@/data/practiceModes';
 
 const PracticeConfigInterface = () => {
   const [selectedQuestions, setSelectedQuestions] = useState('10');
@@ -20,13 +22,19 @@ const PracticeConfigInterface = () => {
   const [selectedTime, setSelectedTime] = useState('30m');
   const [showJustifications, setShowJustifications] = useState(true);
 
+  const params = useSearchParams() 
+  const mode = params.get('mode'); 
+  const practiceModeName = practiceModesData.find((modeData) => modeData.mode === mode)?.title
+  const practiceModeDescription = practiceModesData.find((modeData) => modeData.mode === mode)?.description
+  const practiceModeImage = practiceModeDecoration[mode as keyof typeof practiceModeDecoration]?.image;
+  const practiceModeColor = practiceModeDecoration[mode as keyof typeof practiceModeDecoration]?.color;
 
   // Datos de ejemplo para diferentes modos de práctica
-  const practiceMode = {
-    title: "Materia",
-    description: "Enfócate en una materia específica para fortalecer tus conocimientos. Ideal para repasar temas que necesitas reforzar o para profundizar en áreas de tu interés.",
-    icon: <div className="w-8 h-8 text-white" />
-  };
+  // const practiceMode = {
+  //   title: "Materia",
+  //   description: "Enfócate en una materia específica para fortalecer tus conocimientos. Ideal para repasar temas que necesitas reforzar o para profundizar en áreas de tu interés.",
+  //   icon: <div className="w-8 h-8 text-white" />
+  // };
 
   const questionOptions = [
     '5',
@@ -59,7 +67,7 @@ const PracticeConfigInterface = () => {
   return (
     <PageTransition>
       <div className="h-[100dvh] relative w-[100%] p-4 md:p-0 md:w-auto flex items-center justify-center">
-        <div className="md:max-w-2xl w-[100%] mx-auto">
+        <div className="md:max-w-2xl w-[100%] mx-auto md:mb-0 mb-12">
           <div className="flex items-center mb-6">
             <Link href={"/dashboard"}>
               <button className="cursor-pointer flex items-center transition-colors text-(--text)">
@@ -73,17 +81,17 @@ const PracticeConfigInterface = () => {
           <div className="bg-(--principal-secondary-color) rounded-lg border border-(--shadow) p-4 md:p-2 mb-6">
             <div className="flex items-center gap-4">
               <div className="relative hidden md:block md:h-[80px] md:w-[80px] rounded-lg p-3 flex-shrink-0 overflow-hidden">
-                <div className="absolute inset-0 bg-[var(--blue-main)] opacity-30" />
+                <div className={`absolute inset-0 opacity-30`} style={{ backgroundColor: practiceModeColor}}/>
                 <div className="relative z-10 flex items-center justify-center h-full w-full">
-                  <Image src={"/images/illustrations/practica-5.svg"} width={300} height={300} alt='Imagen de la materia' />
+                  <Image src={`${practiceModeImage}`} width={300} height={300} alt='Imagen de la materia' />
                 </div>
               </div>
               <div>
                 <h2 className="text-xl font-semibol">
-                  {practiceMode.title}
+                  {practiceModeName}
                 </h2>
                 <p className="text-sm leading-relaxed">
-                  {practiceMode.description}
+                  {practiceModeDescription}
                 </p>
               </div>
             </div>
@@ -212,12 +220,12 @@ const PracticeConfigInterface = () => {
           </div>
 
         </div>
-              {/* Start Button */}
-              <div className='bg-(--principal-secondary-color) absolute bottom-0 w-[100%] border-t border-(--shadow) h-[100px] flex justify-center items-center right-0'>
-                  <Button>
-                      Comenzar a practicar
-                  </Button>
-              </div>
+        {/* Start Button */}
+        <div className='bg-(--principal-secondary-color) absolute bottom-0 w-[100%] border-t border-(--shadow) h-[100px] flex justify-center items-center right-0'>
+            <Button>
+                Comenzar a practicar
+            </Button>
+        </div>
       </div>
     </PageTransition>
   );

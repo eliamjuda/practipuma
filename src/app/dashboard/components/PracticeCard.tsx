@@ -1,4 +1,4 @@
-import { PracticeCardProps } from "@/types/dashboard";
+import { PracticeCardProps } from "@/types/practice";
 import Link from "next/link";
 
 export const PracticeCard = ({ item }: PracticeCardProps) => {
@@ -6,10 +6,10 @@ export const PracticeCard = ({ item }: PracticeCardProps) => {
   return (
     <Link href={`/personalizar-practica`} className="block">
       <div className={`bg-(--principal-secondary-color) rounded-lg md:p-1 p-2 border border-(--shadow) flex items-center justify-between cursor-pointer`}>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 flex-col md:flex-row">
           {/* Div de imagen con mismo tamaño que PracticeModeCard pero escalado */}
           <div 
-              className="md:w-20 md:h-20 w-[80px] h-[80px] rounded-lg relative overflow-hidden border-2 border-(--shadow)"
+              className="md:w-20 md:h-20 w-full h-[80px] m-0 rounded-lg relative overflow-hidden border-2 border-(--shadow)"
               style={{
                 backgroundColor: item.color.replace('bg-', '').replace('-500', '').replace('-600', '').replace('-800', ''), // Extraer color base
                 opacity: 10,
@@ -27,7 +27,7 @@ export const PracticeCard = ({ item }: PracticeCardProps) => {
             
           </div>
           
-          <div className="flex-1 md:pr-6 pr-1">
+          <div className="flex-1 md:pr-6 md:pl-2 py-2 md:py-0">
               <h3 className="font-semibold flex items-center">{item.title} 
                   <svg className="ml-1 mr-1" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <g clipPath="url(#clip0_167_10)">
@@ -47,14 +47,14 @@ export const PracticeCard = ({ item }: PracticeCardProps) => {
                       </p>
                   }
               </h3>
-            <p className="mb-2 md:mb-0 text-sm">{item.subtitle}</p>
+            <p className="md:mb-0 text-sm mt-2 md:mt-0 mb-4">{item.subtitle}</p>
             <div className="flex space-x-2">
                 <p
-                  className={`px-2 py-1 text-xs rounded-full font-medium border-(--shadow) border`}>
+                  className={`px-2 py-1 text-center text-xs rounded-full font-medium border-(--shadow) border`}>
                   {item.subject}
                 </p>
                 <p
-                  className={`px-2 py-1 text-xs rounded-full font-medium bg-(--red-main) border-(--red-secondary) border`}>
+                  className={`px-2 py-1 flex items-center text-center text-xs rounded-full font-medium bg-(--red-main) border-(--red-secondary) border`}>
                   {item.priority}
                 </p>
 
@@ -62,7 +62,7 @@ export const PracticeCard = ({ item }: PracticeCardProps) => {
           </div>
         </div>
         
-        <div className="text-gray-400 w-[50px] flex-shrink-0 flex justify-center">
+        <div className="md:flex hidden text-gray-400 w-[50px] flex-shrink-0 justify-center">
           { item.completed ? (
               <div className="bg-(--green-secondary)  text-white w-6 h-6 rounded-full flex items-center justify-center">
                   <svg  xmlns="http://www.w3.org/2000/svg"  width={24}  height={24}  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth={2}  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>

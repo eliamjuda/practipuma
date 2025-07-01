@@ -101,11 +101,26 @@ html.dark {
   --premium-color-2: #043b93;
 }
 
+html {
+  overflow-y: scroll;
+  scrollbar-width: thin;         /* Firefox */
+}
+
+::-webkit-scrollbar {
+  width: 0.6em;                   /* Chrome/Safari */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: transparent; /* invisible pero ocupa espacio */
+}
+
+
 /* 🌐 Comunes */
 body {
   background: var(--principal-main-color);
   color: var(--text);
   font-family: "Baloo Bhaijaan 2", sans-serif;
+
 }
 
 button, a, input, textarea {
@@ -207,3 +222,5 @@ p {
     @apply bg-background text-foreground;
   }
 }
+
+

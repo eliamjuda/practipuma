@@ -5,7 +5,7 @@ import { PracticeModeCard } from './components/PracticeModeCard';
 import { PracticeCard } from './components/PracticeCard';
 import Button from '@/components/ui/button';
 import Image from 'next/image';
-import { PracticeModeCardProps } from '@/types/dashboard';
+import { practiceModesData } from '@/data/practiceModes';
 
 const PracticeDashboard = () => {
   const [isPremium, setIsPremium] = useState(false);
@@ -40,62 +40,62 @@ const PracticeDashboard = () => {
     }
   ];
 
-  const practiceModesData: PracticeModeCardProps[] = [
-    {
-      id: 1,
-      title: "¡Más recientes recientes!",
-      subtitle: "¡Practica con las últimas preguntas agregadas!",
-      color: "bg-purple-600",
-      image: "/images/illustrations/practica-1.svg",
-      badge: "2025",
-      premium: true
-    },
-    {
-      id: 2,
-      title: "Examen simulacro",
-      subtitle: "Practica un examen muy parecido al que harás, sin miedo al éxito.",
-      color: "bg-purple-800",
-      image: "/images/illustrations/practica-2.svg",
-      badge: null,
-      premium: false
-    },
-    {
-      id: 3,
-      title: "Materia",
-      subtitle: "Practica con una materia de tu elección y domínala 🔥",
-      color: "bg-cyan-500",
-      image: "/images/illustrations/practica-3.svg",
-      badge: null,
-      premium: false
-    },
-    {
-      id: 4,
-      title: "Subtema",
-      subtitle: "¿Nos vamos más específico 🎯? Va ",
-      image: "/images/illustrations/practica-4.svg",
-      color: "bg-pink-400",
-      badge: null,
-      premium: true
-    },
-    {
-      id: 5,
-      title: "Aleatorio",
-      subtitle: "Selecciona las materias a practicar y saldrán preguntas aleatorias 🔀",
-      color: "bg-teal-600",
-      image: "/images/illustrations/practica-5.svg",
-      badge: null,
-      premium: true
-    },
-    {
-      id: 6,
-      title: "Hardcore",
-      subtitle: "Como en el minecraft, vidas limitadas, ¡no te equivoques!",
-      color: "bg-red-500",
-      image: "/images/illustrations/practica-6.svg",
-      badge: null,
-      premium: true
-    }
-  ];
+  // const practiceModesData: PracticeModeCardProps[] = [
+  //   {
+  //     id: 1,
+  //     title: "¡Más recientes recientes!",
+  //     subtitle: "¡Practica con las últimas preguntas agregadas!",
+  //     color: "bg-purple-600",
+  //     image: "/images/illustrations/practica-1.svg",
+  //     badge: "2025",
+  //     premium: true
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Examen simulacro",
+  //     subtitle: "Practica un examen muy parecido al que harás, sin miedo al éxito.",
+  //     color: "bg-purple-800",
+  //     image: "/images/illustrations/practica-2.svg",
+  //     badge: null,
+  //     premium: false
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Materia",
+  //     subtitle: "Practica con una materia de tu elección y domínala 🔥",
+  //     color: "bg-cyan-500",
+  //     image: "/images/illustrations/practica-3.svg",
+  //     badge: null,
+  //     premium: false
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Subtema",
+  //     subtitle: "¿Nos vamos más específico 🎯? Va ",
+  //     image: "/images/illustrations/practica-4.svg",
+  //     color: "bg-pink-400",
+  //     badge: null,
+  //     premium: true
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Aleatorio",
+  //     subtitle: "Selecciona las materias a practicar y saldrán preguntas aleatorias 🔀",
+  //     color: "bg-teal-600",
+  //     image: "/images/illustrations/practica-5.svg",
+  //     badge: null,
+  //     premium: true
+  //   },
+  //   {
+  //     id: 6,
+  //     title: "Hardcore",
+  //     subtitle: "Como en el minecraft, vidas limitadas, ¡no te equivoques!",
+  //     color: "bg-red-500",
+  //     image: "/images/illustrations/practica-6.svg",
+  //     badge: null,
+  //     premium: true
+  //   }
+  // ];
 
   return (
     <div className="min-h-screen bg-(--principal-main-color) mt-12 p-6">
@@ -159,12 +159,12 @@ const PracticeDashboard = () => {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {practiceModesData.map((mode) => (
-                  <PracticeModeCard isPremium={isPremium} key={mode.id} mode={mode} />
+                  <PracticeModeCard isPremium={mode.premium} key={mode.id} mode={mode} />
                 ))}
               </div>
             </div>
             {/* Custom Practice Section */}
-            <div className="mb-8 md:mt-24 mt-1">
+            <div className={`mb-8 ${isPremium ? 'md:mt-12 mt-1' : 'md:mt-24 mt-1'}`}>
               <div className="flex items-center space-x-2 mb-4">
                 <h2 className="text-xl font-semibold">
                   Practica a <span className='span-pp'>tu medida</span>

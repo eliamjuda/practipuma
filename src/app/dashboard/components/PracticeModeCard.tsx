@@ -1,14 +1,16 @@
-import { PracticeModeProps } from "@/types/dashboard";
+import { PracticeModeCardProps } from "@/types/practice";
+import { practiceModeDecoration } from "@/data/practiceModes";
 import Link from "next/link";
 
-export const PracticeModeCard = ({ isPremium, mode }: PracticeModeProps) => {
-  const isLocked = mode.premium && !isPremium;
-  
+export const PracticeModeCard = ({ isPremium, mode }: PracticeModeCardProps) => {
+  const isLocked = mode.premium && isPremium;
+  type PracticeModeKey = keyof typeof practiceModeDecoration;
+
   return (
-    <Link href={`${isLocked ? '/dashboard' : `/personalizar-practica`}`}>
+    <Link href={{ pathname: `${isLocked ? '/pricing' : `/personalizar-practica`}`, query: isLocked ? {} : { mode: mode.mode} }}>
       <div className={`${isLocked ? 'cursor-not-allowed' : 'cursor-pointer'} bg-(--principal-secondary-color) relative flex rounded-lg p-1 border border-(--shadow)`}>
-        {mode.premium && !isPremium && (
-          <p className={`px-4 py-2 text-xs rounded absolute right-0 top-[-10px] bg-[linear-gradient(322deg,_rgba(4,59,147,1)_0%,_rgba(7,11,85,1)_60%)] font-bold text-white`}>
+        {mode.premium && isPremium && (
+          <p className={`z-10 px-4 py-2 text-xs rounded absolute right-0 top-[-10px] bg-[linear-gradient(322deg,_rgba(4,59,147,1)_0%,_rgba(7,11,85,1)_60%)] font-bold text-white`}>
             {"PREMIUM"}
           </p>
         )}
@@ -19,7 +21,7 @@ export const PracticeModeCard = ({ isPremium, mode }: PracticeModeProps) => {
             <div 
               className="w-20 h-20 rounded-lg relative overflow-hidden border-2 border-(--shadow)"
               style={{
-                backgroundColor: mode.color.replace('bg-', '').replace('-500', '').replace('-600', '').replace('-800', ''), // Extraer color base
+                backgroundColor: practiceModeDecoration[mode.mode as PracticeModeKey].color || 'transparent',
                 opacity: 10,
               }}
             >
@@ -27,14 +29,14 @@ export const PracticeModeCard = ({ isPremium, mode }: PracticeModeProps) => {
               <div 
                 className="absolute inset-0 opacity-80"
                 style={{
-                  backgroundImage: `url(${mode.image || '/images/illustrations/practica-1.svg'})`,
+                  backgroundImage: `url(${practiceModeDecoration[mode.mode as PracticeModeKey].image || '/images/practice/subject.svg'})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
               />
               {/* Overlay de color */}
               <div 
-                className={`absolute inset-0 ${mode.color} opacity-60 mix-blend-multiply`}
+                className={`absolute inset-0 bg-[${practiceModeDecoration[mode.mode as PracticeModeKey].color}] opacity-60 mix-blend-multiply`}
               />
             </div>
             
@@ -45,7 +47,7 @@ export const PracticeModeCard = ({ isPremium, mode }: PracticeModeProps) => {
                   <p className="bg-(--blue-main) text-white font-medium text-xs rounded-full px-2 py-0.5">{mode.badge}</p>
                 )}
               </div>
-              <p className="text-sm">{mode.subtitle}</p>
+              <p className="text-sm">{mode.description}</p>
             </div>
           </div>
           <div className="text-gray-400 w-[30px] flex-shrink-0 flex justify-center">

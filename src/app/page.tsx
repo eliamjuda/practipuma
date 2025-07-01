@@ -1,3 +1,4 @@
+import Footer from "@/components/common/Footer";
 import { Header } from "@/components/common/Header";
 import { PageTransition } from "@/components/common/PageTransitions";
 import { FeatureSection } from "@/components/landing/FeatureSection";
@@ -142,6 +143,7 @@ export default function LandingPage() {
             }
           />
         </main>
+      <Footer/>
       </PageTransition>
     </div>
   );

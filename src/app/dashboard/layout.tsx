@@ -1,3 +1,4 @@
+import Footer from "@/components/common/Footer";
 import { Header } from "@/components/common/Header";
 import { PageTransition } from "@/components/common/PageTransitions";
 
@@ -15,6 +16,7 @@ export default function RootLayout({
           {children}
         </main>
       </PageTransition>
+      <Footer/>
     </div>
   );
 }
