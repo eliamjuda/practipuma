@@ -11,7 +11,6 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { PageTransition } from '@/components/common/PageTransitions';
 import { useSearchParams } from 'next/navigation';
 import { practiceModeDecoration, practiceModesData } from '@/data/practiceModes';
 
@@ -54,9 +53,6 @@ const PracticeConfigInterface = () => {
     'Física'
   ];
 
-  console.log("Selected Questions:", selectedQuestions);
-  console.log("Selected Subject:", selectedSubject);
-
   const timeOptions = [
     { label: '15m', value: '15m' },
     { label: '30m', value: '30m' },
@@ -64,8 +60,9 @@ const PracticeConfigInterface = () => {
     { label: '60m', value: '60m' }
   ];
 
+  console.log(selectedQuestions, selectedSubject)
+
   return (
-    <PageTransition>
       <div className="h-[100dvh] relative w-[100%] p-4 md:p-0 md:w-auto flex items-center justify-center">
         <div className="md:max-w-2xl w-[100%] mx-auto md:mb-0 mb-12">
           <div className="flex items-center mb-6">
@@ -227,7 +224,6 @@ const PracticeConfigInterface = () => {
             </Button>
         </div>
       </div>
-    </PageTransition>
   );
 };
 
