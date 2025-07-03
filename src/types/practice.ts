@@ -14,19 +14,6 @@ export type PracticeModeCardProps = {
     isPremium: boolean;
 }
 
-// Qué es lo que me importa recibir de un modo de práctica?
-// * id 
-// * mode 
-// * title 
-// * description 
-// * premium 
-// * badge (opcional, puede ser null)
-
-// export type PracticeModeProps = {
-//     isPremium: boolean;
-//     mode: PracticeModeCardProps
-// }
-
 export type PracticeCardProps = {
     item : {
         id: number,
@@ -38,4 +25,14 @@ export type PracticeCardProps = {
         completed: boolean
     }
 }
+
+export const GameModes = {
+  RECENT: 'recent',
+  EXAM: 'exam',
+  HARDCORE: 'hardcore',
+  SUBJECT: 'subject',
+  SUBTOPIC: 'subtopic',
+} as const;
+
+export type GameMode = typeof GameModes[keyof typeof GameModes];
 

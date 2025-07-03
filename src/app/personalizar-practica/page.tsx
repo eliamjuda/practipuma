@@ -3,23 +3,18 @@
 import Button from '@/components/ui/button';
 
 import Link from 'next/link';
-import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PracticeInfo } from './components/PracticeInfo';
 import { GameModes } from '@/types/practice';
 import { PracticeConfig } from './components/PracticeConfig';
+import { usePracticeConfig } from '@/hooks/usePracticeConfig';
 
 const PracticeConfigInterface = () => {
-  const [selectedQuestions, setSelectedQuestions] = useState('');
-  const [selectedSubject, setSelectedSubject] = useState('');
-  const [timerEnabled, setTimerEnabled] = useState(true);
-  const [selectedTime, setSelectedTime] = useState('5');
-  const [showJustifications, setShowJustifications] = useState(true);
+  const params = useSearchParams();
+  const mode = params.get('mode') as GameModes;
+  const { config, updateConfig } = usePracticeConfig(mode);
 
-  const params = useSearchParams() 
-  const mode = params.get('mode') as GameModes; 
-
-  console.log(selectedQuestions, selectedSubject)
+  console.log(config)
 
   return (
       <div className="h-[100dvh] relative w-[100%] max-w-[100%] p-4 md:p-0 md:w-auto flex items-center justify-center">
@@ -36,14 +31,8 @@ const PracticeConfigInterface = () => {
           <PracticeInfo mode={mode} />
 
           <PracticeConfig  
-            setSelectedQuestions={setSelectedQuestions}
-            setSelectedSubject={setSelectedSubject}
-            setSelectedTime={setSelectedTime}
-            setShowJustifications={setShowJustifications}
-            setTimerEnabled={setTimerEnabled}
-            selectedTime={selectedTime}
-            timerEnabled={timerEnabled}
-            showJustifications={showJustifications}
+            config={config}
+            onConfigChange={updateConfig}
           />
 
         </div>

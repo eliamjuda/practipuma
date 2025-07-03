@@ -20,8 +20,13 @@ export const getSubtopicById = (subjectId: number, subtopicId: number): Subtopic
   return subject?.subtopics.find(subtopic => subtopic.id === subtopicId);
 };
 
-export const getSubtopicsBySubject = (subjectId: number): Subtopic[] => {
-  const subject = getSubjectById(subjectId);
+export const getSubtopicsBySubjectId = (subjectId: number): Subtopic[] => {
+  const subject =  getSubjectById(subjectId);
+  return subject?.subtopics || [];
+};
+
+export const getSubtopicsBySubjectName = (subjectName: string): Subtopic[] => {
+  const subject =  getSubjectByName(subjectName);
   return subject?.subtopics || [];
 };
 
