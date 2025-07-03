@@ -159,7 +159,7 @@ const PracticeDashboard = () => {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {practiceModesData.map((mode) => (
-                  <PracticeModeCard isPremium={mode.premium} key={mode.id} mode={mode} />
+                  <PracticeModeCard isPremium={isPremium} key={mode.id} mode={mode} />
                 ))}
               </div>
             </div>

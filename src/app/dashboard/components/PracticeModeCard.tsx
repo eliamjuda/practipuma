@@ -3,13 +3,13 @@ import { practiceModeDecoration } from "@/data/practiceModes";
 import Link from "next/link";
 
 export const PracticeModeCard = ({ isPremium, mode }: PracticeModeCardProps) => {
-  const isLocked = mode.premium && isPremium;
+  const isLocked = mode.premium && !isPremium;
   type PracticeModeKey = keyof typeof practiceModeDecoration;
 
   return (
     <Link href={{ pathname: `${isLocked ? '/pricing' : `/personalizar-practica`}`, query: isLocked ? {} : { mode: mode.mode} }}>
       <div className={`${isLocked ? 'cursor-not-allowed' : 'cursor-pointer'} bg-(--principal-secondary-color) relative flex rounded-lg p-1 border border-(--shadow)`}>
-        {mode.premium && isPremium && (
+        { isLocked && (
           <p className={`z-10 px-4 py-2 text-xs rounded absolute right-0 top-[-10px] bg-[linear-gradient(322deg,_rgba(4,59,147,1)_0%,_rgba(7,11,85,1)_60%)] font-bold text-white`}>
             {"PREMIUM"}
           </p>

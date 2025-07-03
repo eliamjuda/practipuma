@@ -103,6 +103,7 @@ html.dark {
 
 html {
   overflow-y: scroll;
+  overflow-x: hidden;
   scrollbar-width: thin;         /* Firefox */
 }
 

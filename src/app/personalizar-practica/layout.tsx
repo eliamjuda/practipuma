@@ -10,8 +10,8 @@ export default function PracticeLayout({
     <div className="flex flex-col">
       <PageTransition>
         <Suspense fallback={<div>Cargando...</div>}>
-            <main className="">
-            {children}
+            <main className="w-[100dvw] max-w-[100dvw]">
+                {children}
             </main>
       </Suspense>
     </PageTransition>

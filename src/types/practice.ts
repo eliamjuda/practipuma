@@ -7,6 +7,8 @@ export type PracticeModeProps = {
     badge: string | null;
 }
 
+export type GameModes = "recent" | "exam" | "hardcore" | "subject" | "recent" | "subtopic";
+
 export type PracticeModeCardProps = {
     mode: PracticeModeProps;
     isPremium: boolean;
