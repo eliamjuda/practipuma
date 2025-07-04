@@ -7,7 +7,7 @@ export type PracticeModeProps = {
     badge: string | null;
 }
 
-export type GameModes = "recent" | "exam" | "hardcore" | "subject" | "recent" | "subtopic";
+export type GameModes = "recent" | "exam" | "hardcore" | "subject" | "recent" | "subtopic" | "random";
 
 export type PracticeModeCardProps = {
     mode: PracticeModeProps;
@@ -32,6 +32,7 @@ export const GameModes = {
   HARDCORE: 'hardcore',
   SUBJECT: 'subject',
   SUBTOPIC: 'subtopic',
+  RANDOM: 'random'
 } as const;
 
 export type GameMode = typeof GameModes[keyof typeof GameModes];

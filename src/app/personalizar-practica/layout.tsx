@@ -1,3 +1,4 @@
+import { Loader } from "@/components/common/Loading";
 import { PageTransition } from "@/components/common/PageTransitions";
 import { Suspense } from "react";
 
@@ -9,8 +10,9 @@ export default function PracticeLayout({
   return (
     <div className="flex flex-col">
       <PageTransition>
-        <Suspense fallback={<div>Cargando...</div>}>
-            <main className="w-[100dvw] max-w-[100dvw]">
+        <Suspense
+            fallback={<Loader/>}>
+            <main className="w-[100vw] max-w-[100vw]">
                 {children}
             </main>
       </Suspense>

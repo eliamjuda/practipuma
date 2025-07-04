@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 export interface PracticeConfigState {
     mode: GameModes;    
     selectedQuestions: string;
-    selectedSubject: string;
+    selectedSubjects: string[];
     selectedSubtopic?: string;
     timerEnabled: boolean;
     selectedTime: string;
@@ -15,7 +15,7 @@ export const usePracticeConfig = (initialMode: GameModes) => {
   const [config, setConfig] = useState<PracticeConfigState>({
     mode: initialMode,
     selectedQuestions: '',
-    selectedSubject: '',
+    selectedSubjects: [],
     timerEnabled: true,
     selectedTime: '5',
     showJustifications: true,

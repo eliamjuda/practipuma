@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { PracticeModeCard } from './components/PracticeModeCard';
 import { PracticeCard } from './components/PracticeCard';
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/buttonPP';
 import Image from 'next/image';
 import { practiceModesData } from '@/data/practiceModes';
 

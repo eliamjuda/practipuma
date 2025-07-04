@@ -112,7 +112,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: transparent; /* invisible pero ocupa espacio */
+  background-color: transparent;
 }
 
 

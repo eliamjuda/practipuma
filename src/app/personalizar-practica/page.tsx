@@ -1,6 +1,6 @@
 'use client'
 
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/buttonPP';
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -8,6 +8,7 @@ import { PracticeInfo } from './components/PracticeInfo';
 import { GameModes } from '@/types/practice';
 import { PracticeConfig } from './components/PracticeConfig';
 import { usePracticeConfig } from '@/hooks/usePracticeConfig';
+import { PracticeConfigExam } from './components/PracticeConfigExam';
 
 const PracticeConfigInterface = () => {
   const params = useSearchParams();
@@ -30,16 +31,18 @@ const PracticeConfigInterface = () => {
 
           <PracticeInfo mode={mode} />
 
-          <PracticeConfig  
-            config={config}
-            onConfigChange={updateConfig}
-          />
+          {
+            mode === GameModes.EXAM ?           
+                <PracticeConfigExam />
+                :
+                <PracticeConfig config={config} onConfigChange={updateConfig} />
+          }
 
         </div>
         {/* Start Button */}
         <div className='bg-(--principal-secondary-color) absolute bottom-0 w-[100%] border-t border-(--shadow) h-[100px] flex justify-center items-center right-0'>
             <Button>
-                Comenzar a practicar
+                { mode === GameModes.EXAM ? "Comenzar examen" : "Comenzar a practicar" }
             </Button>
         </div>
       </div>
