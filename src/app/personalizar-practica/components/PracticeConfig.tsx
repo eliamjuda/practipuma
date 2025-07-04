@@ -66,6 +66,13 @@ export const PracticeConfig = ({
               ))}
             </SelectContent>
           </Select>
+          {!isPremium && (
+            <p className="text-xs text-(--text) mt-2 opacity-80">
+              Solo los usuarios{" "}
+              <span className="text-(--blue-main)">PREMIUM</span> pueden
+              seleccionar más de 5 preguntas.
+            </p>
+          )}
         </div>
       )}
 
@@ -116,7 +123,11 @@ export const PracticeConfig = ({
           </label>
 
           {(() => {
-            const subject = getSubjectByName(config.selectedSubjects[0]);
+            const subject = getSubjectByName(
+              config.selectedSubjects[0] === undefined
+                ? ""
+                : config.selectedSubjects[0]
+            );
             const subtopics = subject
               ? getSubtopicsBySubjectName(subject.name)
               : [];

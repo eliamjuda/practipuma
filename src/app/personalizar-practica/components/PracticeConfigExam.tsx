@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 interface ExamConfigState {
@@ -6,6 +6,8 @@ interface ExamConfigState {
 }
 
 export const PracticeConfigExam = () => {
+  const isPremium = false; // ⚠️ cambiar a true si el usuario es premium
+
   const [config, setConfig] = useState<ExamConfigState>({
     selectedArea: null,
   });
@@ -16,37 +18,34 @@ export const PracticeConfigExam = () => {
       name: "Área 1",
       icon: "📐",
       description: "Ciencias Físico-Matemáticas y de las Ingenierías",
-      color: "bg-(--principal-main-color) hover:border-blue-400",
-      selectedColor: "bg-(--blue-main) border-blue-500",
     },
     {
-      id: "area2", 
+      id: "area2",
       name: "Área 2",
       icon: "🧪",
       description: "Ciencias Biológicas y de la Salud",
-      color: "bg-(--principal-main-color) hover:border-blue-400",
-      selectedColor: "bg-(--blue-main) border-blue-500",
     },
     {
       id: "area3",
-      name: "Área 3", 
+      name: "Área 3",
       icon: "🏛️",
       description: "Ciencias Sociales",
-      color: "bg-(--principal-main-color) hover:border-blue-400",
-      selectedColor: "bg-(--blue-main) border-blue-500",
     },
     {
       id: "area4",
       name: "Área 4",
       icon: "🎨",
       description: "Artes y Humanidades",
-      color: "bg-(--principal-main-color) hover:border-blue-400",
-      selectedColor: "bg-(--blue-main) border-blue-500",
     },
   ];
 
+  const premiumAllowedAreas = ["area2", "area4"];
+
   const handleAreaSelect = (areaId: string) => {
-    setConfig({ selectedArea: areaId });
+    const isAllowed = isPremium || premiumAllowedAreas.includes(areaId);
+    if (isAllowed) {
+      setConfig({ selectedArea: areaId });
+    }
   };
 
   return (
@@ -60,28 +59,38 @@ export const PracticeConfigExam = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1  gap-4">
-        {areas.map((area) => (
-          <button
-            key={area.id}
-            onClick={() => handleAreaSelect(area.id)}
-            className={`px-6 py-2 cursor-pointer rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              config.selectedArea === area.id
-                ? area.selectedColor
-                : area.color
-            }`}
-          >
-            <div className="flex items-center gap-4">
-              <div className="text-1xl">{area.icon}</div>
-              <div className="flex-1">
-                <h4 className="font-semibold text-(--text) text-m">
-                  {area.name}
-                </h4>
-                <p className="text-sm text-(--text) opacity-70 md:block hidden">
-                  {area.description}
-                </p>
-              </div>
-                <div className={`text-(--text) ml-2 ${config.selectedArea === area.id ? "visible" : "invisible"}`}>
+      <div className="grid grid-cols-1 gap-4">
+        {areas.map((area) => {
+          const isDisabled = !isPremium && !premiumAllowedAreas.includes(area.id);
+          const isSelected = config.selectedArea === area.id;
+          const baseColor = isSelected
+            ? "bg-(--blue-main) border-blue-500"
+            : "bg-(--principal-main-color) ";
+
+          return (
+            <button
+              key={area.id}
+              onClick={() => handleAreaSelect(area.id)}
+              className={`px-6 py-2 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
+                baseColor
+              } ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:border-blue-400"}`}
+              disabled={isDisabled}
+            >
+              <div className="flex items-center gap-4">
+                <div className="text-1xl">{area.icon}</div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-(--text) text-m">
+                    {area.name}{ isDisabled ? " 🔒" : "" }
+                  </h4>
+                  <p className="text-sm text-(--text) opacity-70 md:block hidden">
+                    {area.description}
+                  </p>
+                </div>
+                <div
+                  className={`text-(--text) ml-2 ${
+                    isSelected ? "visible" : "invisible"
+                  }`}
+                >
                   <svg
                     className="w-6 h-6"
                     fill="currentColor"
@@ -94,20 +103,32 @@ export const PracticeConfigExam = () => {
                     />
                   </svg>
                 </div>
-              
-            </div>
-          </button>
-        ))}
+              </div>
+            </button>
+          );
+        })}
       </div>
+        
+        {
+            !isPremium && (
+        <Link href={"/pricing"}>
 
-        <div className={`mt-6 p-4 bg-(--principal-main-color) rounded-lg border border-(--shadow) ${config.selectedArea ? 'visible': 'invisible'}`}>
-          <div className="flex items-center gap-2">
-            <span className="text-green-500"><Check /></span>
-            <p className="text-sm text-(--text) font-medium">
-              {areas.find(area => area.id === config.selectedArea)?.name} seleccionada
-            </p>
-          </div>
+                      <div
+        className={`mt-6 p-4 bg-(--principal-main-color) transition-all rounded-lg border border-(--shadow) hover:border-(--blue-main)`}
+      >
+        <div className="flex flex-col items-center gap-2 justify-center">
+            <span className="text-xs/tight ">¿De verdad todavía no eres PREMIUM? 😢</span> 
+          <p className="text-sm text-(--text) font-medium text-center">
+            Desbloquea todas las áreas y examenes nuevos siempre con <span className="text-(--blue-main)">PREMIUM</span>
+          </p>
         </div>
+
+      </div>
+      </Link>
+
+            ) 
+        }
+
     </div>
   );
 };
