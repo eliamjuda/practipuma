@@ -2,17 +2,24 @@ import Link from "next/link";
 import { useState } from "react";
 
 interface ExamConfigState {
-  selectedArea: string | null;
+  selectedArea: ExamAreaId;
 }
 
-export const PracticeConfigExam = () => {
+type ExamAreaId = '' | 'area1' | 'area2' | 'area3' | 'area4';
+
+
+interface PracticeConfigExamProps {
+  setExamAreaSelected: React.Dispatch<React.SetStateAction<"" | ExamAreaId>>;
+}
+
+export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamProps ) => {
   const isPremium = false; // ⚠️ cambiar a true si el usuario es premium
 
   const [config, setConfig] = useState<ExamConfigState>({
-    selectedArea: null,
+    selectedArea: '',
   });
 
-  const areas = [
+  const areas: {id: ExamAreaId; name: string; icon: string; description: string}[] = [
     {
       id: "area1",
       name: "Área 1",
@@ -41,10 +48,11 @@ export const PracticeConfigExam = () => {
 
   const premiumAllowedAreas = ["area2", "area4"];
 
-  const handleAreaSelect = (areaId: string) => {
+  const handleAreaSelect = (areaId: 'area1' | 'area2' | 'area3' | 'area4' | '') => {
     const isAllowed = isPremium || premiumAllowedAreas.includes(areaId);
     if (isAllowed) {
       setConfig({ selectedArea: areaId });
+      setExamAreaSelected(areaId)
     }
   };
 
@@ -70,7 +78,7 @@ export const PracticeConfigExam = () => {
           return (
             <button
               key={area.id}
-              onClick={() => handleAreaSelect(area.id)}
+              onClick={() => handleAreaSelect(area.id )}
               className={`px-6 py-2 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
                 baseColor
               } ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:border-blue-400"}`}

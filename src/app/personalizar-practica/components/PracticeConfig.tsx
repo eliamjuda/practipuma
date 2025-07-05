@@ -55,7 +55,7 @@ export const PracticeConfig = ({
               <SelectValue placeholder="Seleccionar cantidad" />
             </SelectTrigger>
             <SelectContent>
-              {QUESTIONS_COUNT_OPTIONS.map((option) => (
+              {(config.mode === GameModes.SUBTOPIC ? ["5","10"] : QUESTIONS_COUNT_OPTIONS).map((option) => (
                 <SelectItem
                   key={option}
                   value={option}

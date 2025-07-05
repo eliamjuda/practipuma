@@ -1,53 +1,97 @@
-'use client'
+"use client";
 
-import Button from '@/components/ui/buttonPP';
+import Button from "@/components/ui/buttonPP";
 
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { PracticeInfo } from './components/PracticeInfo';
-import { GameModes } from '@/types/practice';
-import { PracticeConfig } from './components/PracticeConfig';
-import { usePracticeConfig } from '@/hooks/usePracticeConfig';
-import { PracticeConfigExam } from './components/PracticeConfigExam';
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { PracticeInfo } from "./components/PracticeInfo";
+import { GameModes } from "@/types/practice";
+import { PracticeConfig } from "./components/PracticeConfig";
+import { usePracticeConfig } from "@/hooks/usePracticeConfig";
+import { PracticeConfigExam } from "./components/PracticeConfigExam";
+import { useState } from "react";
+
+type ExamAreaId = 'area1' | 'area2' | 'area3' | 'area4';
 
 const PracticeConfigInterface = () => {
   const params = useSearchParams();
-  const mode = params.get('mode') as GameModes;
+  const mode = params.get("mode") as GameModes;
   const { config, updateConfig } = usePracticeConfig(mode);
+  const [ examAreaSelected, setExamAreaSelected ] = useState<ExamAreaId | ''>('')
 
-  console.log(config)
+  const isConfigValid = () => {
+    const { selectedQuestions, selectedSubjects, selectedSubtopic } = config;
+
+    const hasSubject = selectedSubjects.length > 0;
+    const hasQuestions = !!selectedQuestions;
+    const hasSubtopic = !!selectedSubtopic;
+    const hasSelectedArea = !!examAreaSelected
+
+    switch (mode) {
+      case GameModes.HARDCORE:
+        return hasSubject;
+      case GameModes.RANDOM:
+        return hasSubject && hasQuestions;
+      case GameModes.SUBTOPIC:
+        return hasSubject && hasQuestions && hasSubtopic;
+      case GameModes.EXAM:
+        return hasSelectedArea
+      default: // NORMAL, etc.
+        return hasSubject && hasQuestions;
+    }
+  };
+
+  console.log(config);
 
   return (
-      <div className="h-[100dvh] relative w-[100%] max-w-[100%] p-4 md:p-0 md:w-auto flex items-center justify-center">
-        <div className="md:max-w-2xl w-[100%] mx-auto md:mb-0 mb-12">
-          <div className="flex items-center mb-6">
-            <Link href={"/dashboard"}>
-              <button className="cursor-pointer flex items-center transition-colors text-(--text)">
-                <svg  xmlns="http://www.w3.org/2000/svg"  width={24}  height={24}  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth={2}  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-arrow-narrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l4 4" /><path d="M5 12l4 -4" /></svg>
-                <p className='mx-2 font-medium'>Configurar práctica</p>
-              </button>
-            </Link>
-          </div>
-
-          <PracticeInfo mode={mode} />
-
-          {
-            mode === GameModes.EXAM ?           
-                <PracticeConfigExam />
-                :
-                <PracticeConfig config={config} onConfigChange={updateConfig} />
-          }
-
+    <div className="h-[100dvh] relative w-[100%] max-w-[100%] p-4 md:p-0 md:w-auto flex items-center justify-center">
+      <div className="md:max-w-2xl w-[100%] mx-auto md:mb-0 mb-12">
+        <div className="flex items-center mb-6">
+          <Link href={"/dashboard"}>
+            <button className="cursor-pointer flex items-center transition-colors text-(--text)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={24}
+                height={24}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="icon icon-tabler icons-tabler-outline icon-tabler-arrow-narrow-left"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M5 12l14 0" />
+                <path d="M5 12l4 4" />
+                <path d="M5 12l4 -4" />
+              </svg>
+              <p className="mx-2 font-medium">Configurar práctica</p>
+            </button>
+          </Link>
         </div>
-        {/* Start Button */}
-        <div className='bg-(--principal-secondary-color) absolute bottom-0 w-[100%] border-t border-(--shadow) h-[100px] flex justify-center items-center right-0'>
-            <Button>
-                { mode === GameModes.EXAM ? "Comenzar examen" : "Comenzar a practicar" }
-            </Button>
-        </div>
+
+        <PracticeInfo mode={mode} />
+
+        {mode === GameModes.EXAM ? (
+          <PracticeConfigExam setExamAreaSelected={setExamAreaSelected} />
+        ) : (
+          <PracticeConfig config={config} onConfigChange={updateConfig} />
+        )}
       </div>
+      {/* Start Button */}
+      <div className="bg-(--principal-secondary-color) absolute bottom-0 w-[100%] border-t border-(--shadow) h-[100px] flex justify-center items-center right-0">
+        <Button
+          disabled={!isConfigValid()}
+          className={`${
+            !isConfigValid() ? "opacity-50 pointer-events-none" : ""
+          }`}
+        >
+          {mode === GameModes.EXAM ? "Comenzar examen" : "Comenzar a practicar"}
+        </Button>
+      </div>
+    </div>
   );
 };
 
 export default PracticeConfigInterface;
-
