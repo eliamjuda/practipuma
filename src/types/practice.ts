@@ -37,3 +37,21 @@ export const GameModes = {
 
 export type GameMode = typeof GameModes[keyof typeof GameModes];
 
+export type Question = {
+    question_id: number;
+    statement: string;
+    explanation: string;
+    type: 'text' | 'latext';
+}
+
+export type Answer = {
+    option_id: number;
+    content: string;
+    is_correct: boolean;
+    type: 'text' | 'latex';
+}
+
+export type PracticeQuestion = {
+    question: Question;
+    answers: Answer[];
+}

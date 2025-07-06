@@ -32,7 +32,6 @@ export const PracticeConfig = ({
 }: PracticeConfigProps) => {
   const SUBJECT_NAMES = getSubjectNames();
 
-  // ⚠️ Hardcore config: fuerza preguntas y sin reloj
   useEffect(() => {
     if (config.mode === GameModes.HARDCORE) {
       onConfigChange({ selectedQuestions: "30", timerEnabled: false });

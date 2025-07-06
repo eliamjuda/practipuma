@@ -79,9 +79,9 @@ export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamPr
             <button
               key={area.id}
               onClick={() => handleAreaSelect(area.id )}
-              className={`px-6 py-2 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
+              className={`px-6 py-2 rounded-lg border-2 border-(--shadow) transition-all duration-200 text-left ${
                 baseColor
-              } ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:border-blue-400"}`}
+              } ${isDisabled ? "opacity-30 cursor-not-allowed" : "cursor-pointer hover:border-blue-400"}`}
               disabled={isDisabled}
             >
               <div className="flex items-center gap-4">
@@ -122,12 +122,12 @@ export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamPr
         <Link href={"/pricing"}>
 
                       <div
-        className={`mt-6 p-4 bg-(--principal-main-color) transition-all rounded-lg border border-(--shadow) hover:border-(--blue-main)`}
+        className={`md:mt-6 md:p-4 md:bg-(--principal-main-color) transition-all rounded-lg md:border md:border-(--shadow) hover:border-(--blue-main)`}
       >
         <div className="flex flex-col items-center gap-2 justify-center">
-            <span className="text-xs/tight ">¿De verdad todavía no eres PREMIUM? 😢</span> 
-          <p className="text-sm text-(--text) font-medium text-center">
-            Desbloquea todas las áreas y examenes nuevos siempre con <span className="text-(--blue-main)">PREMIUM</span>
+            <span className="text-xs/tight md:block hidden">¿De verdad todavía no eres PREMIUM? 😢</span> 
+          <p className="text-sm text-(--text) font-medium text-center md:mt-0 mt-2">
+            Desbloquea todas las áreas y simulacros nuevos con <span className="text-(--blue-main)">PREMIUM</span>
           </p>
         </div>
 

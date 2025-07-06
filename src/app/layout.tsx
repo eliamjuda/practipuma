@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Baloo_Bhaijaan_2 } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import "katex/dist/katex.min.css";
+
 
 const baloo = Baloo_Bhaijaan_2({
   variable: "--font-baloo",

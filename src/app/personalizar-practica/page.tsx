@@ -10,6 +10,7 @@ import { PracticeConfig } from "./components/PracticeConfig";
 import { usePracticeConfig } from "@/hooks/usePracticeConfig";
 import { PracticeConfigExam } from "./components/PracticeConfigExam";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type ExamAreaId = 'area1' | 'area2' | 'area3' | 'area4';
 
@@ -40,6 +41,31 @@ const PracticeConfigInterface = () => {
         return hasSubject && hasQuestions;
     }
   };
+
+  const router = useRouter();
+
+  const handleStart = () => {
+  if (!isConfigValid()) return;
+
+  const params = new URLSearchParams();
+
+  // Siempre presentes
+  params.set("mode", mode);
+  params.set("subject", config.selectedSubjects[0] || "");
+  params.set("questions", config.selectedQuestions || "5");
+  params.set("timer", config.timerEnabled ? "true" : "false");
+  params.set("time", config.selectedTime || "0");
+  params.set("justify", config.showJustifications ? "true" : "false");
+
+  // Solo si el modo es SUBTOPIC
+  if (mode === GameModes.SUBTOPIC) {
+    params.set("subtopic", config.selectedSubtopic || "");
+  }
+
+
+  router.push(`/practicar?${params.toString()}`);
+};
+
 
   console.log(config);
 
@@ -81,14 +107,16 @@ const PracticeConfigInterface = () => {
       </div>
       {/* Start Button */}
       <div className="bg-(--principal-secondary-color) absolute bottom-0 w-[100%] border-t border-(--shadow) h-[100px] flex justify-center items-center right-0">
-        <Button
-          disabled={!isConfigValid()}
-          className={`${
-            !isConfigValid() ? "opacity-50 pointer-events-none" : ""
-          }`}
-        >
-          {mode === GameModes.EXAM ? "Comenzar examen" : "Comenzar a practicar"}
-        </Button>
+      <Button
+        disabled={!isConfigValid()}
+        onClick={handleStart}
+        className={`${
+          !isConfigValid() ? "opacity-50 pointer-events-none" : ""
+        }`}
+      >
+        {mode === GameModes.EXAM ? "Comenzar examen" : "Comenzar a practicar"}
+      </Button>
+
       </div>
     </div>
   );
