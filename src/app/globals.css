@@ -34,9 +34,12 @@ html.light {
   --text: #232627;
   --principal-main-color: white;
   --principal-secondary-color: #f7f7f7;
+  --shadow-hover: #898787;
+
+  --bg-stage: #87B2F8;
 
   --red-main: #ffc4cd;
-  --red-secondary: #f7304d;
+  --red-secondary: #F7304D;
   --green-main: #b7f1d3;
   --green-secondary: #078f07;
   --back-red: #a8061e;
@@ -58,8 +61,10 @@ html.dark {
   --principal-main-color: #141618;
   --principal-secondary-color: #1B1D1F;
 
+  --bg-stage: #133F87;
+
   --red-main: #2C1A1A;
-  --red-secondary: #DC26;
+  --red-secondary: #DC2626;
   --green-main: #0C311E;
   --green-secondary: #20F420;
   --back-red: #A8061E;
