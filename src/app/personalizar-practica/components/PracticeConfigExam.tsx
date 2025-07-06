@@ -81,16 +81,16 @@ export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamPr
               onClick={() => handleAreaSelect(area.id )}
               className={`px-6 py-2 rounded-lg border-2 border-(--shadow) transition-all duration-200 text-left ${
                 baseColor
-              } ${isDisabled ? "opacity-30 cursor-not-allowed" : "cursor-pointer hover:border-blue-400"}`}
+              } ${isDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer hover:border-blue-400"}`}
               disabled={isDisabled}
             >
               <div className="flex items-center gap-4">
                 <div className="text-1xl">{area.icon}</div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-(--text) text-m">
+                  <h4 className={`font-semibold text-m ${isSelected ? "text-white" : "text-(--text)"}`}>
                     {area.name}{ isDisabled ? " 🔒" : "" }
                   </h4>
-                  <p className="text-sm text-(--text) opacity-70 md:block hidden">
+                  <p className={`text-sm opacity-90 md:block hidden ${isSelected ? "text-white" : "text-(--text)"} `}>
                     {area.description}
                   </p>
                 </div>
@@ -101,7 +101,7 @@ export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamPr
                 >
                   <svg
                     className="w-6 h-6"
-                    fill="currentColor"
+                    fill="white"
                     viewBox="0 0 20 20"
                   >
                     <path

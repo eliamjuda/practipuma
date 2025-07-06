@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { practiceModesData } from '@/data/practiceModes';
 
 const PracticeDashboard = () => {
-  const [isPremium, setIsPremium] = useState(false);
+  const [isPremium, setIsPremium] = useState(true);
 
   const practiceData = [
     {
