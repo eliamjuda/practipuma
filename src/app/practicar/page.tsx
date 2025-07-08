@@ -5,7 +5,7 @@ import ReactKatex from "@pkasila/react-katex";
 import Header from "./components/Header";
 import ProgressBar from "./components/ProgressBar";
 import Button from "@/components/ui/buttonPP";
-import { PracticeQuestion } from "@/types/practice";
+import { GameModes, PracticeQuestion } from "@/types/practice";
 import { usePracticeParams } from "@/hooks/usePracticeParams";
 
 const LETTERS = ["A", "B", "C", "D"];
@@ -104,6 +104,9 @@ export default function Practicar() {
   const [showExplanationModal, setShowExplanationModal] = useState(false);
   const [timeLeft, setTimeLeft] = useState(config.selectedTime*60);
   const [timeExpired, setTimeExpired] = useState(false);
+  const MAX_LIVES = 3;
+  const [lives, setLives] = useState(MAX_LIVES);
+
 
 
 
@@ -143,6 +146,16 @@ export default function Practicar() {
         isCorrect: isCorrect
       }]);
       setConfirmed(true);
+
+      if (config.mode === GameModes.HARDCORE && !isCorrect) {
+      setLives(prev => {
+        const updated = prev - 1;
+        if (updated <= 0) {
+          setPracticeComplete(true);
+        }
+        return updated;
+      });
+    }
     }
   };
 
@@ -205,7 +218,7 @@ export default function Practicar() {
     return (
       <div className="h-screen w-screen flex flex-col">
         <Header
-          
+
         />
         <div className="flex-1 overflow-y-auto flex justify-center items-center">
           <div className="w-full md:w-[30%] p-2 md:p-8 text-center">
@@ -257,7 +270,8 @@ export default function Practicar() {
           <ProgressBar 
             current={currentQuestionIndex + 1} 
             total={totalQuestions} 
-            progress={progress} 
+            progress={progress}
+            lives={config.mode === GameModes.HARDCORE ? lives : undefined}
           />
 
           <div className="min-h-[40%] flex items-center justify-center text-center text-1xl md:text-xl font-medium mb-6">
