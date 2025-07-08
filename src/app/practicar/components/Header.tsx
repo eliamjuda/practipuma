@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 interface HeaderProps {
-  subject: string;
-  subtopic: string;
-  showTimer: boolean;
-  totalTime?: number; // en segundos
+  subject?: string;
+  subtopic?: string;
+  showTimer?: boolean;
+  totalTime?: number; // en segundos}
 }
 
 export default function Header({ subject, subtopic, showTimer, totalTime = 0 }: HeaderProps) {
-  const [timeLeft, setTimeLeft] = useState(totalTime * 60);
+  const [timeLeft, setTimeLeft] = useState(totalTime);
 
   useEffect(() => {
     if (!showTimer || totalTime <= 0) return;
@@ -53,7 +53,7 @@ export default function Header({ subject, subtopic, showTimer, totalTime = 0 }: 
 
       <div className="flex flex-row md:items-center gap-1 md:gap-2 text-center justify-center items-center">
         <div className="text-lg font-bold md:ml-0 ml-6 leading-none">{subject}</div>
-        <div className="hidden md:block mx-1 w-[4px] h-[4px] bg-(--text) rounded-full" />
+        { subject && <div className="hidden md:block mx-1 w-[4px] h-[4px] bg-(--text) rounded-full" />}
         <div className="text-[1rem]/tight mx-1 leading-none truncate max-w-[100px]">{subtopic}</div>
 
         {showTimer && (

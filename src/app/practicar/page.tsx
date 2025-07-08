@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OptionCard from "./components/OptionCard";
 import ReactKatex from "@pkasila/react-katex";
 import Header from "./components/Header";
@@ -95,19 +95,40 @@ const mockQuestions: PracticeQuestion[] = [
 ];
 
 export default function Practicar() {
+  const config = usePracticeParams();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [confirmed, setConfirmed] = useState(false);
   const [practiceComplete, setPracticeComplete] = useState(false);
   const [userAnswers, setUserAnswers] = useState<{questionId: number, selectedAnswer: number, isCorrect: boolean}[]>([]);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(config.selectedTime*60);
+  const [timeExpired, setTimeExpired] = useState(false);
 
-  const config = usePracticeParams();
+
 
   const totalQuestions = config.questions;
   const currentQuestion = mockQuestions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
 
+    // ⏱ Temporizador que termina el juego
+  useEffect(() => {
+    if (!config.timerEnabled || timeLeft <= 0) return;
+
+    const interval = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setPracticeComplete(true);
+          setTimeExpired(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [config.timerEnabled, timeLeft]);
 
   const handleSelect = (index: number) => {
     if (!confirmed) setSelectedOption(index);
@@ -183,11 +204,14 @@ export default function Practicar() {
   if (practiceComplete) {
     return (
       <div className="h-screen w-screen flex flex-col">
-        {/* <Header /> */}
+        <Header
+          
+        />
         <div className="flex-1 overflow-y-auto flex justify-center items-center">
           <div className="w-full md:w-[30%] p-2 md:p-8 text-center">
             <div className="mb-8">
-              <h2 className="text-2xl font-bold mb-4">¡Práctica Completada!</h2>
+              <h2 className="text-2xl font-bold mb-4">{ timeExpired ? '¡Se acabó el tiempo!' : '¡Práctica Completada!'}</h2>
+              
               <div className="text-6xl mb-4">{scorePercentage >= 70 ? '🎉' : '📚'}</div>
               <div className="text-xl mb-2">
                 Puntuación: {correctAnswers}/{totalQuestions}
@@ -226,7 +250,7 @@ export default function Practicar() {
         subject={currentQuestion.question.subject || "Materia"}
         subtopic={currentQuestion.question.subtopic || "Subtema"}
         showTimer={config.timerEnabled}
-        totalTime={config.selectedTime}
+        totalTime={timeLeft}
       />
       <div className="flex-1 overflow-y-auto flex justify-center">
         <div className="w-full md:w-[30%] p-2 md:p-8">
