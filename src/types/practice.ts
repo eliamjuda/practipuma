@@ -39,6 +39,8 @@ export type GameMode = typeof GameModes[keyof typeof GameModes];
 
 export type Question = {
     question_id: number;
+    subject: string;
+    subtopic: string;
     statement: string;
     explanation: string;
     type: 'text' | 'latext';

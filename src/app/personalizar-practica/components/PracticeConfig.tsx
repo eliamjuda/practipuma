@@ -39,7 +39,7 @@ export const PracticeConfig = ({
   }, [config.mode, onConfigChange]);
 
   return (
-    <div className="bg-(--principal-secondary-color) rounded-lg border border-(--shadow) p-6 mb-8">
+    <div className="bg-(--principal-secondary-color) rounded-lg border border-(--shadow) p-6">
       {/* 🔢 Número de preguntas */}
       {config.mode !== GameModes.HARDCORE && (
         <div className="mb-6">

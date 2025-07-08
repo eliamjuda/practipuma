@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import ProgressBar from "./components/ProgressBar";
 import Button from "@/components/ui/buttonPP";
 import { PracticeQuestion } from "@/types/practice";
+import { usePracticeParams } from "@/hooks/usePracticeParams";
 
 const LETTERS = ["A", "B", "C", "D"];
 
@@ -14,6 +15,8 @@ const mockQuestions: PracticeQuestion[] = [
   {
     question: {
       question_id: 1,
+      subject: 'Matemáticas',
+      subtopic: 'Álgebra lineal',
       statement: "¿Cuál de las siguientes funciones tiene un comportamiento creciente?",
       explanation: "La respuesta correcta es f(x) = x³, ya que su derivada 3x² es siempre positiva para x ≠ 0.",
       type: "text",
@@ -28,6 +31,8 @@ const mockQuestions: PracticeQuestion[] = [
   {
     question: {
       question_id: 2,
+      subject: 'Español',
+      subtopic: 'Un subtema bien larguísimo como la UNAM los pone a veces',
       statement: "¿Cuál es la derivada de f(x) = 2x² + 3x - 1?",
       explanation: "La derivada se calcula aplicando la regla de la potencia: d/dx(ax^n) = nax^(n-1).",
       type: "text",
@@ -42,6 +47,8 @@ const mockQuestions: PracticeQuestion[] = [
   {
     question: {
       question_id: 3,
+      subject: 'Geografía',
+      subtopic: 'La tierra y el negocio',
       statement: "¿Cuál es el límite de (x² - 4)/(x - 2) cuando x tiende a 2?",
       explanation: "Se puede factorizar el numerador: (x² - 4) = (x + 2)(x - 2), por lo que el límite es 4.",
       type: "text",
@@ -56,20 +63,24 @@ const mockQuestions: PracticeQuestion[] = [
   {
     question: {
       question_id: 4,
-      statement: "¿Cuál es la integral de f(x) = 3x²?",
+      subject: 'Literatura',
+      subtopic: 'Pessoa',
+      statement: "Fernando António Nogueira Pessoa (Lisboa, 13 de junio de 1888-ibidem, 30 de noviembre de 1935), conocido como Fernando Pessoa, fue un poeta, escritor, crítico literario, dramaturgo, ensayista, traductor, editor y filósofo portugués, descrito como una de las figuras literarias más importantes del siglo XX y uno de los grandes poetas en lengua portuguesa. También tradujo y escribió en inglés y francés. Se le ha llamado el poeta portugués más universal. Por haber sido educado en Sudáfrica, en una escuela católica irlandesa de Durban, llegó a tener más familiaridad con el idioma inglés que con el portugués, escribiendo en tal idioma sus primeros poemas. El crítico literario Harold Bloom consideró a Pessoa como «Whitman renacido»,[8]​ y lo incluyó entre los 26 mejores escritores de la civilización occidental, no solo de la literatura portuguesa sino de la inglesa también. De las cuatro obras que publicó en vida, tres son en lengua inglesa y solo una en portugués, titulada Mensagem. Pessoa tradujo varias obras del inglés al portugués (p. ej., de Shakespeare o Edgar Allan Poe), y del portugués (en particular, de António Botto y José de Almada Negreiros) al inglés y al francés. Pessoa fue un escritor prolífico, y no solo bajo su propio nombre, pues creó aproximadamente otros setenta y cinco, de los cuales destacan los de Alberto Caeiro, Alexander Search, Álvaro de Campos, Bernardo Soares y Ricardo Reis. No los llamaba pseudónimos, pues creía que esta palabra no captaba su verdadera vida intelectual independiente, y en cambio los llamó sus heterónimos. Estas figuras imaginarias a veces mostraban posturas impopulares o extremas. El poeta estadounidense Robert Hass ha dicho al respecto que: «otros modernistas como Yeats, Pound o Elliot inventaban máscaras a través de las cuales hablaban ocasionalmente... Pessoa inventaba poetas enteros». Buscó también inspiraciones en las obras de los poetas William Wordsworth, James Joyce y Walt Whitman.",
       explanation: "La integral de 3x² es x³ + C, aplicando la regla de integración de potencias.",
       type: "text",
     },
     answers: [
-      { option_id: 1, content: "$ 6x + C $", is_correct: false, type: "latex" },
-      { option_id: 2, content: "$ x³ + C $", is_correct: true, type: "latex" },
-      { option_id: 3, content: "$ 3x³ + C $", is_correct: false, type: "latex" },
-      { option_id: 4, content: "$ \\frac{x³}{3} + C $", is_correct: false, type: "latex" },
+      { option_id: 1, content: "Fernando Pessoa nació el 13 de junio de 1888 en la capital portuguesa,[a]​ hijo de Joaquim de Seabra Pessoa, de 38 años, funcionario público del Ministerio de Justicia, y crítico musical del periódico Diário de Notícias, y natural de Lisboa", is_correct: false, type: "latex" },
+      { option_id: 2, content: "Fernando Pessoa nació el 13 de junio de 1888 en la capital portuguesa,[a]​ hijo de Joaquim de Seabra Pessoa, de 38 años, funcionario público del Ministerio de Justicia, y crítico musical del periódico Diário de Notícias, y natural de Lisboa", is_correct: true, type: "latex" },
+      { option_id: 3, content: "Fernando Pessoa nació el 13 de junio de 1888 en la capital portuguesa,[a]​ hijo de Joaquim de Seabra Pessoa, de 38 años, funcionario público del Ministerio de Justicia, y crítico musical del periódico Diário de Notícias, y natural de Lisboa", is_correct: false, type: "latex" },
+      { option_id: 4, content: "Fernando Pessoa nació el 13 de junio de 1888 en la capital portuguesa,[a]​ hijo de Joaquim de Seabra Pessoa, de 38 años, funcionario público del Ministerio de Justicia, y crítico musical del periódico Diário de Notícias, y natural de Lisboa", is_correct: false, type: "latex" },
     ],
   },
   {
     question: {
       question_id: 5,
+      subject: 'Eliam',
+      subtopic: 'Judá',
       statement: "¿Qué representa la segunda derivada de una función?",
       explanation: "La segunda derivada indica la concavidad de la función y los puntos de inflexión.",
       type: "text",
@@ -91,9 +102,12 @@ export default function Practicar() {
   const [userAnswers, setUserAnswers] = useState<{questionId: number, selectedAnswer: number, isCorrect: boolean}[]>([]);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
 
-  const totalQuestions = mockQuestions.length;
+  const config = usePracticeParams();
+
+  const totalQuestions = config.questions;
   const currentQuestion = mockQuestions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+
 
   const handleSelect = (index: number) => {
     if (!confirmed) setSelectedOption(index);
@@ -169,7 +183,7 @@ export default function Practicar() {
   if (practiceComplete) {
     return (
       <div className="h-screen w-screen flex flex-col">
-        <Header />
+        {/* <Header /> */}
         <div className="flex-1 overflow-y-auto flex justify-center items-center">
           <div className="w-full md:w-[30%] p-2 md:p-8 text-center">
             <div className="mb-8">
@@ -208,8 +222,12 @@ export default function Practicar() {
 
   return (
     <div className="h-screen w-screen flex flex-col">
-      <Header />
-
+      <Header
+        subject={currentQuestion.question.subject || "Materia"}
+        subtopic={currentQuestion.question.subtopic || "Subtema"}
+        showTimer={config.timerEnabled}
+        totalTime={config.selectedTime}
+      />
       <div className="flex-1 overflow-y-auto flex justify-center">
         <div className="w-full md:w-[30%] p-2 md:p-8">
           <ProgressBar 
@@ -273,7 +291,7 @@ export default function Practicar() {
           <div className="flex gap-6 mb-4">
                         <button
               onClick={handleShowExplanation}
-              className="flex flex-col items-center text-gray-600 hover:text-blue-500 transition-colors"
+              className={`flex flex-col items-center text-gray-600 hover:text-blue-500 transition-colors ${config.showJustifications ? 'visible' : 'invisible'}`}
             >
               <svg className="cursor-pointer w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

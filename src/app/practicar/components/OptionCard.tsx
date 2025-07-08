@@ -18,7 +18,7 @@ export default function OptionCard({
   onClick,
 }: OptionCardProps) {
   const baseStyle =
-    "cursor-pointer px-1 py-4 border-1 transition-colors hover:border-(--shadow-hover) w-full rounded-lg mb-3";
+    "cursor-pointer px-1 py-2 border-1 transition-colors hover:border-(--shadow-hover) w-full rounded-lg mb-3";
 
   const getCardStyle = () => {
     // Si ya se confirmó
@@ -80,11 +80,11 @@ export default function OptionCard({
       className={`${baseStyle} ${getCardStyle()}`}
       disabled={isCorrect !== null} // Deshabilitar después de confirmar
     >
-      <div className="text-left h-auto">
-        <span className={`${baseStyleSpan} ${getSpanStyle()}`}>
+      <div className="text-left h-auto min-h-full flex items-center">
+        <span className={`${baseStyleSpan} ${getSpanStyle()} flex items-center`}>
           {letter}
         </span>
-        <span>
+        <span className="w-[500px]">
           <ReactKatex>{content}</ReactKatex>
         </span>
       </div>
