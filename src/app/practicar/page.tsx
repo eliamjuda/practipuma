@@ -7,6 +7,7 @@ import ProgressBar from "./components/ProgressBar";
 import Button from "@/components/ui/buttonPP";
 import { GameModes, PracticeQuestion } from "@/types/practice";
 import { usePracticeParams } from "@/hooks/usePracticeParams";
+import PracticeSummary from "./components/PracticeSummary";
 
 const LETTERS = ["A", "B", "C", "D"];
 
@@ -102,19 +103,18 @@ export default function Practicar() {
   const [practiceComplete, setPracticeComplete] = useState(false);
   const [userAnswers, setUserAnswers] = useState<{questionId: number, selectedAnswer: number, isCorrect: boolean}[]>([]);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
+  const [startTime] = useState(Date.now()); 
   const [timeLeft, setTimeLeft] = useState(config.selectedTime*60);
   const [timeExpired, setTimeExpired] = useState(false);
+  const [tiempoFinal, setTiempoFinal] = useState<string | null>(null);
   const MAX_LIVES = 3;
   const [lives, setLives] = useState(MAX_LIVES);
-
-
-
 
   const totalQuestions = config.questions;
   const currentQuestion = mockQuestions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
 
-    // ⏱ Temporizador que termina el juego
+  // ⏱ Temporizador que termina el juego
   useEffect(() => {
     if (!config.timerEnabled || timeLeft <= 0) return;
 
@@ -122,8 +122,12 @@ export default function Practicar() {
       setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(interval);
-          setPracticeComplete(true);
-          setTimeExpired(true);
+          const finalTime = getFormattedElapsedTime(startTime); // 👈
+          setTiempoFinal(finalTime);
+          setTimeout(() => {
+            setPracticeComplete(true);
+            setTimeExpired(true);
+          }, 2000);
           return 0;
         }
         return prev - 1;
@@ -131,11 +135,23 @@ export default function Practicar() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [config.timerEnabled, timeLeft]);
+  }, [config.timerEnabled, timeLeft, startTime]);
 
   const handleSelect = (index: number) => {
     if (!confirmed) setSelectedOption(index);
   };
+
+
+  function getFormattedElapsedTime(startTime: number): string {
+    const elapsedMs = Date.now() - startTime;
+    const totalSeconds = Math.floor(elapsedMs / 1000);
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
+  }
+
 
   const handleConfirm = () => {
     if (selectedOption !== null) {
@@ -166,18 +182,13 @@ export default function Practicar() {
       setSelectedOption(null);
       setConfirmed(false);
     } else {
-      // Completar la práctica
-      setPracticeComplete(true);
-    }
-  };
+      setTimeout(() => {
+        const finalTime = getFormattedElapsedTime(startTime);
+        setTiempoFinal(finalTime);
+        setPracticeComplete(true);
 
-  const handleRestart = () => {
-    setCurrentQuestionIndex(0);
-    setSelectedOption(null);
-    setConfirmed(false);
-    setPracticeComplete(false);
-    setUserAnswers([]);
-    setShowExplanationModal(false);
+      }, 2000); // 2 segundos de loading
+    }
   };
 
   const handleReport = () => {
@@ -195,6 +206,7 @@ export default function Practicar() {
     setShowExplanationModal(false);
   };
 
+
   // Determinar si la respuesta seleccionada es correcta
   const isSelectedCorrect = selectedOption !== null ? currentQuestion.answers[selectedOption].is_correct : false;
 
@@ -211,49 +223,16 @@ export default function Practicar() {
   };
 
   // Calcular estadísticas finales
-  const correctAnswers = userAnswers.filter(answer => answer.isCorrect).length;
-  const scorePercentage = Math.round((correctAnswers / totalQuestions) * 100);
 
   if (practiceComplete) {
     return (
-      <div className="h-screen w-screen flex flex-col">
-        <Header
-
-        />
-        <div className="flex-1 overflow-y-auto flex justify-center items-center">
-          <div className="w-full md:w-[30%] p-2 md:p-8 text-center">
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold mb-4">{ timeExpired ? '¡Se acabó el tiempo!' : '¡Práctica Completada!'}</h2>
-              
-              <div className="text-6xl mb-4">{scorePercentage >= 70 ? '🎉' : '📚'}</div>
-              <div className="text-xl mb-2">
-                Puntuación: {correctAnswers}/{totalQuestions}
-              </div>
-              <div className="text-lg text-gray-600">
-                {scorePercentage}% de respuestas correctas
-              </div>
-            </div>
-            
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold mb-4">Resumen de respuestas:</h3>
-              <div className="space-y-2">
-                {userAnswers.map((answer, index) => (
-                  <div key={index} className="flex justify-between items-center p-2 rounded border">
-                    <span>Pregunta {index + 1}</span>
-                    <span className={answer.isCorrect ? 'text-green-600' : 'text-red-600'}>
-                      {answer.isCorrect ? '✓' : '✗'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <Button onClick={handleRestart} variant="normal">
-              Practicar de Nuevo
-            </Button>
-          </div>
-        </div>
-      </div>
+      <PracticeSummary
+        userAnswers={userAnswers}
+        totalQuestions={totalQuestions}
+        totalTime={tiempoFinal}
+        timeExpired={timeExpired}
+        questions={mockQuestions.slice(0, Math.min(totalQuestions, mockQuestions.length))}
+      />
     );
   }
 
