@@ -14,7 +14,7 @@ export default function BarChart({ total, correct, incorrect }: BarChartProps) {
   }, []);
 
   // Aseguramos un mínimo para buena escala visual
-  const yMax = Math.max(Math.ceil(total / 5) * 5, 30);
+  const yMax = Math.max(Math.ceil(total / 5) * 5, total);
 
   // Crear 7 etiquetas uniformemente distribuidas
   const steps = 6;

@@ -67,18 +67,13 @@ export default function PracticeSummary({
   };
 
   // Mensaje motivacional basado en el rendimiento
-  const getMotivationalMessage = () => {
+  const getShittyMessage = () => {
     if (accuracyPercentage >= 90) return "¡Excelente! Estás dominando el tema 🏆";
     if (accuracyPercentage >= 75) return "¡Muy bien! Vas por buen camino 🔥";
     if (accuracyPercentage >= 60) return "¡Buen trabajo! Sigue practicando 💪";
     return "¡No te rindas! La práctica hace al maestro 📚";
   };
 
-  const getAccuracyColor = () => {
-    if (accuracyPercentage >= 75) return "text-green-500";
-    if (accuracyPercentage >= 60) return "text-yellow-500";
-    return "text-red-500";
-  };
 
   return (
     <>
@@ -87,7 +82,7 @@ export default function PracticeSummary({
         <div className="md:w-[50%] w-full px-4 py-6 md:py-10">
           {/* Precisión central */}
           <div className="border-1 border-(--shadow) bg-(--principal-secondary-color) rounded-xl p-6 md:p-10 w-full mb-2 text-center">
-            <h2 className={`text-4xl md:text-5xl font-bold ${getAccuracyColor()}`}>
+            <h2 className={`text-4xl md:text-5xl font-bold text-(--blue-main)`}>
               {accuracyPercentage}%
             </h2>
             <p className="text-lg">de acierto</p>
@@ -97,8 +92,8 @@ export default function PracticeSummary({
           </div>
           
           {/* Mensaje motivacional */}
-          <button className="bg-(--blue-main) rounded-xl w-full py-3 font-semibold mb-2">
-            <p>{getMotivationalMessage()}</p>
+          <button className="bg-(--blue-main) rounded-xl w-full py-3 font-semibold mb-2 text-white px-2">
+            <p>{getShittyMessage()}</p>
           </button>
           
           {/* Estadísticas */}
@@ -130,8 +125,8 @@ export default function PracticeSummary({
                       key={index} 
                       className="flex justify-between bg-(--principal-main-color) border border-(--shadow) rounded-lg px-4 py-2 cursor-pointer hover:bg-(--shadow) transition-colors"
                     >
-                      <span>{subtema.nombre}</span>
-                      <span className={subtema.aciertos === subtema.total ? 'text-green-500' : 'text-yellow-500'}>
+                      <span className="truncate max-w-55">{subtema.nombre}</span>
+                      <span>
                         {subtema.aciertos}/{subtema.total}
                       </span>
                     </div>
