@@ -4,6 +4,7 @@ import Header from "./Header";
 import BarChart from "@/components/ui/BarChart";
 import { PracticeQuestion } from "@/types/practice";
 import ReactKatex from "@pkasila/react-katex";
+import Link from "next/link";
 
 interface PracticeSummaryProps {
   userAnswers?: {questionId: number, selectedAnswer: number, isCorrect: boolean}[];
@@ -208,12 +209,16 @@ export default function PracticeSummary({
           
           {/* Botones finales */}
           <div className="flex flex-col md:flex-row gap-4 mt-10 w-full justify-center">
-            <Button>
-              Ir a inicio    
-            </Button>
+            <Link href={"/dashboard"}>
+              <Button>
+                Ir a inicio    
+              </Button>
+            </Link>
+            {/* <Link href={"/persona"}>
             <Button>
               Volver a practicar
             </Button>
+            </Link> */}
           </div>
         </div>
       </div>

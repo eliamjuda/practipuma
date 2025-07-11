@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import OptionCard from "./components/OptionCard";
 import ReactKatex from "@pkasila/react-katex";
 import Header from "./components/Header";
@@ -203,6 +203,9 @@ export default function Practicar() {
   const [showExplanationModal, setShowExplanationModal] = useState(false);
   const [tiempoFinal, setTiempoFinal] = useState<string | null>(null);
   const [timeExpired, setTimeExpired] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const startTimeRef = useRef(Date.now());
+
   const [lives, setLives] = useState(3);
 
   // Memoizar valores calculados
@@ -217,12 +220,16 @@ export default function Practicar() {
   );
 
   // Función memoizada para formatear tiempo
-  const getFormattedElapsedTime = useCallback((start: number) => {
-    const elapsed = Math.floor((Date.now() - start) / 1000);
+  const getFormattedElapsedTime = useCallback((startTime: number) => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
     const mins = Math.floor(elapsed / 60);
     const secs = elapsed % 60;
     return `${mins}m ${secs < 10 ? "0" : ""}${secs}s`;
   }, []);
+
+  const calculateFinalTime = useCallback(() => {
+    return getFormattedElapsedTime(startTimeRef.current);
+  }, [getFormattedElapsedTime]);
 
   // Memoizar funciones de manejo de eventos
   const handleSelect = useCallback((index: number) => {
@@ -261,11 +268,15 @@ export default function Practicar() {
       setSelectedOption(null);
       setConfirmed(false);
     } else {
-      const final = getFormattedElapsedTime(Date.now());
-      setTiempoFinal(final);
+       const finalTime = calculateFinalTime();
+      setTiempoFinal(finalTime);
       setPracticeComplete(true);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     }
-  }, [currentQuestionIndex, totalQuestions, getFormattedElapsedTime]);
+  }, [currentQuestionIndex, totalQuestions, calculateFinalTime]);
 
   const handleReport = useCallback(() => {
     console.log(`Reportando pregunta ${currentQuestion.question.question_id}`);
@@ -303,17 +314,16 @@ export default function Practicar() {
     if (!config.timerEnabled) return;
 
     const totalTimeSec = config.selectedTime * 60;
-    const startTime = Date.now();
 
     const timeoutId = setTimeout(() => {
-      const final = getFormattedElapsedTime(startTime);
-      setTiempoFinal(final);
-      setPracticeComplete(true);
-      setTimeExpired(true);
+      handleTimerExpire();
     }, totalTimeSec * 1000);
 
-    return () => clearTimeout(timeoutId);
-  }, [config.timerEnabled, config.selectedTime, getFormattedElapsedTime]);
+    timeoutRef.current = timeoutId;
+
+    return () => clearTimeout(timeoutId); // prevención estándar
+  }, [config.timerEnabled, config.selectedTime, handleTimerExpire, practiceComplete]);
+
 
   if (practiceComplete) {
     return (
