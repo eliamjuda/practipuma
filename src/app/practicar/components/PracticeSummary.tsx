@@ -208,7 +208,7 @@ export default function PracticeSummary({
           </div>
           
           {/* Botones finales */}
-          <div className="flex flex-col md:flex-row gap-4 mt-10 w-full justify-center">
+          <div className="flex flex-col md:flex-row gap-4 mt-10 items-center w-full justify-center">
             <Link href={"/dashboard"}>
               <Button>
                 Ir a inicio    

@@ -42,9 +42,28 @@ const PracticeConfigInterface = () => {
 
   const router = useRouter();
 
+  // Función helper para convertir area ID a número
+  const getAreaNumber = (areaId: ExamAreaId): number => {
+    const mapping: Record<ExamAreaId, number> = {
+      'area1': 1,
+      'area2': 2, 
+      'area3': 3,
+      'area4': 4
+    };
+    return mapping[areaId];
+  };
+
   const handleStart = () => {
     if (!isConfigValid()) return;
 
+    // Si es modo EXAM, navegar al examen simulacro
+    if (mode === GameModes.EXAM) {
+      const areaNumber = getAreaNumber(examAreaSelected as ExamAreaId);
+      router.push(`/practicar-examen-simulacro?area=${areaNumber}`);
+      return;
+    }
+
+    // Para otros modos, usar la lógica existente
     const params = new URLSearchParams();
     params.set("mode", mode);
     params.set("subject", config.selectedSubjects[0] || "");

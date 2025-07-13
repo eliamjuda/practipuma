@@ -5,21 +5,27 @@ interface ExamConfigState {
   selectedArea: ExamAreaId;
 }
 
-type ExamAreaId = '' | 'area1' | 'area2' | 'area3' | 'area4';
-
+type ExamAreaId = "" | "area1" | "area2" | "area3" | "area4";
 
 interface PracticeConfigExamProps {
   setExamAreaSelected: React.Dispatch<React.SetStateAction<"" | ExamAreaId>>;
 }
 
-export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamProps ) => {
+export const PracticeConfigExam = ({
+  setExamAreaSelected,
+}: PracticeConfigExamProps) => {
   const isPremium = false; // ⚠️ cambiar a true si el usuario es premium
 
   const [config, setConfig] = useState<ExamConfigState>({
-    selectedArea: '',
+    selectedArea: "",
   });
 
-  const areas: {id: ExamAreaId; name: string; icon: string; description: string}[] = [
+  const areas: {
+    id: ExamAreaId;
+    name: string;
+    icon: string;
+    description: string;
+  }[] = [
     {
       id: "area1",
       name: "Área 1",
@@ -48,11 +54,13 @@ export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamPr
 
   const premiumAllowedAreas = ["area2", "area4"];
 
-  const handleAreaSelect = (areaId: 'area1' | 'area2' | 'area3' | 'area4' | '') => {
+  const handleAreaSelect = (
+    areaId: "area1" | "area2" | "area3" | "area4" | ""
+  ) => {
     const isAllowed = isPremium || premiumAllowedAreas.includes(areaId);
     if (isAllowed) {
       setConfig({ selectedArea: areaId });
-      setExamAreaSelected(areaId)
+      setExamAreaSelected(areaId);
     }
   };
 
@@ -69,7 +77,8 @@ export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamPr
 
       <div className="grid grid-cols-1 gap-4">
         {areas.map((area) => {
-          const isDisabled = !isPremium && !premiumAllowedAreas.includes(area.id);
+          const isDisabled =
+            !isPremium && !premiumAllowedAreas.includes(area.id);
           const isSelected = config.selectedArea === area.id;
           const baseColor = isSelected
             ? "bg-(--blue-main) border-blue-500"
@@ -78,19 +87,30 @@ export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamPr
           return (
             <button
               key={area.id}
-              onClick={() => handleAreaSelect(area.id )}
-              className={`px-6 py-2 rounded-lg border-2 border-(--shadow) transition-all duration-200 text-left ${
-                baseColor
-              } ${isDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer hover:border-blue-400"}`}
+              onClick={() => handleAreaSelect(area.id)}
+              className={`px-6 py-2 rounded-lg border-2 border-(--shadow) transition-all duration-200 text-left ${baseColor} ${
+                isDisabled
+                  ? "opacity-40 cursor-not-allowed"
+                  : "cursor-pointer hover:border-blue-400"
+              }`}
               disabled={isDisabled}
             >
               <div className="flex items-center gap-4">
                 <div className="text-1xl">{area.icon}</div>
                 <div className="flex-1">
-                  <h4 className={`font-semibold text-m ${isSelected ? "text-white" : "text-(--text)"}`}>
-                    {area.name}{ isDisabled ? " 🔒" : "" }
+                  <h4
+                    className={`font-semibold text-m ${
+                      isSelected ? "text-white" : "text-(--text)"
+                    }`}
+                  >
+                    {area.name}
+                    {isDisabled ? " 🔒" : ""}
                   </h4>
-                  <p className={`text-sm opacity-90 md:block hidden ${isSelected ? "text-white" : "text-(--text)"} `}>
+                  <p
+                    className={`text-sm opacity-90 md:block hidden ${
+                      isSelected ? "text-white" : "text-(--text)"
+                    } `}
+                  >
                     {area.description}
                   </p>
                 </div>
@@ -99,11 +119,7 @@ export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamPr
                     isSelected ? "visible" : "invisible"
                   }`}
                 >
-                  <svg
-                    className="w-6 h-6"
-                    fill="white"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-6 h-6" fill="white" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -116,27 +132,24 @@ export const PracticeConfigExam = ({ setExamAreaSelected }: PracticeConfigExamPr
           );
         })}
       </div>
-        
-        {
-            !isPremium && (
+
+      {!isPremium && (
         <Link href={"/pricing"}>
-
-                      <div
-        className={`md:mt-6 md:p-4 md:bg-(--principal-main-color) transition-all rounded-lg md:border md:border-(--shadow) hover:border-(--blue-main)`}
-      >
-        <div className="flex flex-col items-center gap-2 justify-center">
-            <span className="text-xs/tight md:block hidden">¿De verdad todavía no eres PREMIUM? 😢</span> 
-          <p className="text-sm text-(--text) font-medium text-center md:mt-0 mt-2">
-            Desbloquea todas las áreas y simulacros nuevos con <span className="text-(--blue-main)">PREMIUM</span>
-          </p>
-        </div>
-
-      </div>
-      </Link>
-
-            ) 
-        }
-
+          <div
+            className={`md:mt-6 md:p-4 md:bg-(--principal-main-color) transition-all rounded-lg md:border md:border-(--shadow) hover:border-(--blue-main)`}
+          >
+            <div className="flex flex-col items-center gap-2 justify-center">
+              <span className="text-xs/tight md:block hidden">
+                ¿De verdad todavía no eres PREMIUM? 😢
+              </span>
+              <p className="text-sm text-(--text) font-medium text-center md:mt-0 mt-2">
+                Desbloquea todas las áreas y simulacros nuevos con{" "}
+                <span className="text-(--blue-main)">PREMIUM</span>
+              </p>
+            </div>
+          </div>
+        </Link>
+      )}
     </div>
   );
 };

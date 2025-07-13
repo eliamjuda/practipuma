@@ -44,7 +44,7 @@ export default function Header({
       <div className="flex flex-row items-center gap-2 text-center justify-center">
         {subject && (
           <>
-            <div className="text-lg font-bold leading-none truncate">
+            <div className="text-lg font-bold leading-none truncate md:ml-0 ml-5">
               {subject}
             </div>
             <div className="hidden md:block mx-1 w-[4px] h-[4px] bg-(--text) rounded-full" />
