@@ -36,11 +36,11 @@ export default function ExamHeader({
   }, []);
 
   return (
-    <div className="bg-(--principal-secondary-color) border-b-2 border-(--shadow) px-4 py-4 flex-shrink-0">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+    <div className="bg-(--principal-secondary-color) border-b-2 border-(--shadow) px-4 py-4  flex-shrink-0">
+      <div className="max-w-7xl mx-auto flex items-center justify-evenly">
         {/* Logo y botón cerrar */}
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="text-(--text) hover:text-(--blue-main)">
+        <div className="flex items-center gap-5 md:gap-20">
+          <Link href="/dashboard" className="text-(--text) hover:text-(--shadow-hover)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={24}
@@ -58,13 +58,12 @@ export default function ExamHeader({
             </svg>
           </Link>
           
-          <div className="hidden md:block w-px h-6 bg-(--shadow)" />
           
           <div className="flex flex-col">
             <h1 className="text-lg font-bold text-(--text)">
               Examen Simulacro
             </h1>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 hidden md:block">
               {AREA_NAMES[area]}
             </p>
           </div>
@@ -86,7 +85,7 @@ export default function ExamHeader({
           </div>
 
           {/* Respondidas */}
-          <div className="text-center">
+          <div className="text-center hidden md:block">
             <div className="text-lg font-bold text-(--blue-main)">
               {answeredCount}
             </div>
@@ -97,19 +96,16 @@ export default function ExamHeader({
 
           {/* Tiempo */}
           <div className="text-center">
-            <div className="text-lg font-bold text-(--text)">
+            <span className="bg-blue-400 rounded-2xl px-2 text-xs md:text-sm font-bold text-white">
               {elapsedTime}
-            </div>
-            <div className="text-xs text-gray-500">
-              Tiempo
-            </div>
+            </span>
           </div>
         </div>
 
         {/* Botón navegación */}
         <button
           onClick={onToggleNavigation}
-          className={`p-2 rounded-lg border transition-colors ${
+          className={`p-2 rounded-lg cursor-pointer border transition-colors ${
             showNavigation 
               ? 'bg-(--blue-main) text-white border-(--blue-main)' 
               : 'bg-(--principal-main-color) text-(--text) border-(--shadow) hover:bg-(--shadow)'

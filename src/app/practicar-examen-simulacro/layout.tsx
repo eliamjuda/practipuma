@@ -1,10 +1,13 @@
 // app/practicar-examen-simulacro/layout.tsx
-import { PageTransition } from '@/components/common/PageTransitions';
-import { Metadata } from 'next';
+import { Loader } from "@/components/common/Loading";
+import { PageTransition } from "@/components/common/PageTransitions";
+import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: 'Examen Simulacro - PrepPolitécnico',
-  description: 'Practica con un examen simulacro completo del IPN',
+  title: "Examen Simulacro - PractiPuma",
+  description:
+    "Practica con un examen simulacro completo del examen de admisión de la UNAM",
 };
 
 export default function ExamLayout({
@@ -13,10 +16,12 @@ export default function ExamLayout({
   children: React.ReactNode;
 }) {
   return (
-      <PageTransition>
-      <div className="min-h-screen bg-(--principal-main-color)">
-        {children}
-      </div>
-    </PageTransition> 
+    <PageTransition>
+      <Suspense fallback={<Loader />}>
+        <div className="min-h-screen bg-(--principal-main-color)">
+          {children}
+        </div>
+      </Suspense>
+    </PageTransition>
   );
 }

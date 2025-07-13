@@ -106,13 +106,13 @@ export default function ExamNavigation({
               <div className="text-xs text-gray-500">Actual</div>
             </div>
             <div className="p-2 bg-(--principal-main-color) rounded">
-              <div className="text-lg font-bold text-(--green-main)">
+              <div className="text-lg font-bold text-(--green-secondary)">
                 {userAnswers.size}
               </div>
               <div className="text-xs text-gray-500">Respondidas</div>
             </div>
             <div className="p-2 bg-(--principal-main-color) rounded">
-              <div className="text-lg font-bold text-gray-500">
+              <div className="text-lg font-bold text-(--text)">
                 {120 - userAnswers.size}
               </div>
               <div className="text-xs text-gray-500">Pendientes</div>
@@ -138,7 +138,7 @@ export default function ExamNavigation({
                       key={question.question_id}
                       onClick={() => onQuestionSelect(index)}
                       className={`
-                        w-10 h-10 rounded border-2 font-medium text-sm transition-colors
+                        w-10 h-10 rounded-lg border-2 font-medium text-sm cursor-pointer transition-colors
                         ${getStatusColor(status)}
                       `}
                       title={`Pregunta ${index + 1} - ${subject}`}
@@ -161,7 +161,7 @@ export default function ExamNavigation({
               <span>Pregunta actual</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-(--green-main)"></div>
+              <div className="w-4 h-4 rounded bg-(--green-secondary)"></div>
               <span>Respondida</span>
             </div>
             <div className="flex items-center gap-2">

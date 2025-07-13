@@ -107,18 +107,18 @@ export default function ExamSummary({
 
   // Mensaje motivacional
   const getMotivationalMessage = () => {
-    if (stats.percentage >= 90) return "¡Excelente! Dominas perfectamente el área 🏆";
-    if (stats.percentage >= 80) return "¡Muy bien! Tienes un gran conocimiento 🔥";
-    if (stats.percentage >= 70) return "¡Buen trabajo! Vas en la dirección correcta 💪";
-    if (stats.percentage >= 60) return "¡Bien! Sigue estudiando para mejorar 📚";
-    return "¡No te desanimes! Identifica tus áreas de oportunidad 💡";
+    if (stats.percentage >= 90) return "Un día más en la oficina, ya la hiciste, eres el top 5% 🏆";
+    if (stats.percentage >= 80) return "¿Hay algo que hagas mal? ❤️‍🔥❤️‍🔥";
+    if (stats.percentage >= 70) return "Este resultado no es suerte, es dedicación, ¡vamosssss! 💪";
+    if (stats.percentage >= 60) return "Osea, no está tan mal, pero sabemos que puedes hacerlo mejor";
+    return "Creo que alguien no ha usado PractiPuma lo suficiente 🧐";
   };
 
   // Obtener color del porcentaje
   const getPercentageColor = (percentage: number) => {
-    if (percentage >= 80) return "text-(--green-main)";
+    if (percentage >= 80) return "text-(--green-secondary)";
     if (percentage >= 60) return "text-(--blue-main)";
-    return "text-(--red-main)";
+    return "text-(--red-secondary)";
   };
 
   const selectedSubjectData = selectedSubject ? 
@@ -128,18 +128,33 @@ export default function ExamSummary({
     <div className="min-h-screen bg-(--principal-main-color) text-(--text)">
       {/* Header */}
       <div className="bg-(--principal-secondary-color) border-b border-(--shadow) p-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div>
+        <div className="max-w-6xl mx-auto flex items-center gap-5">
+          <Link href="/dashboard" className="text-(--text) hover:text-(--shadow-hover)">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M18 6l-12 12" />
+              <path d="M6 6l12 12" />
+            </svg>
+          </Link>
+          <div className="flex flex-col md:flex-row justify-center items-center md:gap-5">
             <h1 className="text-xl font-bold">Resultados del Examen</h1>
             <p className="text-sm text-gray-500">{AREA_NAMES[area]}</p>
           </div>
-          <Link href="/dashboard">
-            <Button variant="normal">Volver al inicio</Button>
-          </Link>
+
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto p-4 md:p-8">
+      <div className="max-w-6xl mx-auto p-4 md:p-8 md:mt-20">
         {/* Resultado principal */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {/* Porcentaje principal */}
@@ -165,15 +180,15 @@ export default function ExamSummary({
                   <div className="text-xs text-gray-500">Total</div>
                 </div>
                 <div className="text-center p-3 bg-(--principal-main-color) rounded-lg">
-                  <div className="text-2xl font-bold text-(--green-main)">{stats.correct}</div>
+                  <div className="text-2xl font-bold text-(--green-secondary)">{stats.correct}</div>
                   <div className="text-xs text-gray-500">Correctas</div>
                 </div>
                 <div className="text-center p-3 bg-(--principal-main-color) rounded-lg">
-                  <div className="text-2xl font-bold text-(--red-main)">{stats.incorrect}</div>
+                  <div className="text-2xl font-bold text-(--red-secondary)">{stats.incorrect}</div>
                   <div className="text-xs text-gray-500">Incorrectas</div>
                 </div>
                 <div className="text-center p-3 bg-(--principal-main-color) rounded-lg">
-                  <div className="text-2xl font-bold text-(--text)">{totalTime}</div>
+                  <div className="text-xl font-bold text-(--text)">{totalTime}</div>
                   <div className="text-xs text-gray-500">Tiempo</div>
                 </div>
               </div>
@@ -202,7 +217,7 @@ export default function ExamSummary({
                 <button
                   key={subject.subject}
                   onClick={() => setSelectedSubject(subject.subject)}
-                  className="w-full flex justify-between items-center p-3 bg-(--principal-main-color) 
+                  className="cursor-pointer w-full flex justify-between items-center p-3 bg-(--principal-main-color) 
                            border border-(--shadow) rounded-lg hover:bg-(--shadow) transition-colors"
                 >
                   <span className="font-medium truncate">{subject.subject}</span>
@@ -292,8 +307,8 @@ export default function ExamSummary({
                         </span>
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                           isCorrect 
-                            ? 'bg-(--green-main) text-white' 
-                            : 'bg-(--red-main) text-white'
+                            ? 'bg-(--green-main) border-1 border-(--green-secondary) text-white' 
+                            : 'bg-(--red-main) border-1 border-(--red-secondary) text-white'
                         }`}>
                           {isCorrect ? 'Correcta' : 'Incorrecta'}
                         </span>
@@ -330,12 +345,12 @@ export default function ExamSummary({
                               className={`flex items-center gap-3 p-3 rounded-lg border ${bgColor} ${borderColor}`}
                             >
                               <div className={`flex items-center justify-center w-8 h-8 rounded font-bold ${
-                                isCorrectAnswer ? 'bg-white text-(--green-main)' : 
-                                isUserSelection && !isCorrect ? 'bg-white text-(--red-main)' : 
+                                isCorrectAnswer ? 'bg-(--green-secondary) text-white' : 
+                                isUserSelection && !isCorrect ? 'bg-(--red-secondary) text--white' : 
                                 'bg-(--principal-main-color) text-(--text)'
                               }`}>
                                 {isCorrectAnswer ? '✓' : 
-                                 isUserSelection && !isCorrect ? '✗' : 
+                                 isUserSelection && !isCorrect ? 'X' : 
                                  LETTERS[answerIndex]}
                               </div>
                               <div className={`flex-1 ${textColor}`}>

@@ -169,7 +169,7 @@ export default function PracticarExamenSimulacro() {
           <div className="flex-1 overflow-y-auto">
             {/* Container centrado para móvil */}
             <div className="min-h-full flex items-center justify-center p-4 md:p-8">
-              <div className="w-full max-w-4xl">
+              <div className="max-w-full">
                 <ExamQuestionCard
                   question={currentQuestion}
                   selectedAnswer={selectedAnswer}
@@ -181,24 +181,21 @@ export default function PracticarExamenSimulacro() {
             <div className="h-32 md:h-0"></div>
           </div>
 
-          {/* Controles de navegación - Sticky en móvil */}
+          {/* Controles de navegación */}
           <div className="bg-(--principal-secondary-color) border-t border-(--shadow) 
-                        sticky bottom-0 z-10 p-4 md:relative md:bottom-auto">
+                        sticky bottom-0 z-10 p-4 md:bottom-auto">
             {/* Versión móvil */}
-            <div className="md:hidden space-y-3">
+            <div className="flex md:flex-row flex-col w-full justify-center items-center  md:gap-50">
               {/* Primera fila: Estado y botón finalizar */}
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-(--text) font-medium">
-                  {answeredCount}/120 respondidas
-                </span>
-                <Button
-                  onClick={finishExam}
-                  disabled={!canFinishExam}
-                  variant={canFinishExam ? "correct" : "normal"}
-                  className={`text-sm px-3 py-2 ${!canFinishExam ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  {canFinishExam ? 'Finalizar' : `Faltan ${120 - answeredCount}`}
-                </Button>
+              <div className={`md:block order-1 mt-4 md:mt-0 `}>
+                  <Button
+                    onClick={finishExam}
+                    disabled={!canFinishExam}
+                    variant={canFinishExam ? "correct" : "normal"}
+                    className={`md:block md:mb-0 ${!canFinishExam ? 'opacity-50 cursor-not-allowed hidden' : 'block mb-15'}`}
+                  >
+                    {canFinishExam ? 'Finalizar' : `Faltan ${120 - answeredCount}`}
+                  </Button>
               </div>
               
               {/* Segunda fila: Navegación */}
@@ -209,7 +206,7 @@ export default function PracticarExamenSimulacro() {
                   variant="normal"
                   className={`flex-1 ${currentQuestionIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  ← Anterior
+                  Anterior
                 </Button>
                 <Button
                   onClick={goToNextQuestion}
@@ -217,50 +214,12 @@ export default function PracticarExamenSimulacro() {
                   variant="normal"
                   className={`flex-1 ${currentQuestionIndex === 119 ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  Siguiente →
+                  Siguiente
                 </Button>
               </div>
             </div>
 
-            {/* Versión desktop (original) */}
-            <div className="hidden md:block">
-              <div className="max-w-4xl mx-auto flex justify-between items-center">
-                {/* Navegación anterior/siguiente */}
-                <div className="flex gap-2">
-                  <Button
-                    onClick={goToPrevQuestion}
-                    disabled={currentQuestionIndex === 0}
-                    variant="normal"
-                    className={`${currentQuestionIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    ← Anterior
-                  </Button>
-                  <Button
-                    onClick={goToNextQuestion}
-                    disabled={currentQuestionIndex === 119}
-                    variant="normal"
-                    className={`${currentQuestionIndex === 119 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    Siguiente →
-                  </Button>
-                </div>
 
-                {/* Estado y botón finalizar */}
-                <div className="flex items-center gap-4">
-                  <span className="text-sm text-(--text)">
-                    {answeredCount}/120 respondidas
-                  </span>
-                  <Button
-                    onClick={finishExam}
-                    disabled={!canFinishExam}
-                    variant={canFinishExam ? "correct" : "normal"}
-                    className={`${!canFinishExam ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    {canFinishExam ? 'Finalizar Examen' : `Faltan ${120 - answeredCount}`}
-                  </Button>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

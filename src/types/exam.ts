@@ -15,7 +15,7 @@ export interface ExamQuestion {
   area: ExamArea;
   statement: string;
   explanation: string;
-  type: "text" | "image";
+  type: "text" | "latex";
   answers: ExamAnswer[];
 }
 
