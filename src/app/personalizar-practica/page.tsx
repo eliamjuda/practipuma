@@ -19,6 +19,15 @@ const PracticeConfigInterface = () => {
   const { config, updateConfig } = usePracticeConfig(mode);
   const [examAreaSelected, setExamAreaSelected] = useState<ExamAreaId | ''>('');
 
+  const getSubjects = () => {
+    let subjects = ''
+    if ( config.selectedSubjects.length > 1) {
+      subjects = config.selectedSubjects.join("-")
+      return subjects
+    }
+    return config.selectedSubjects[0]
+  }
+
   const isConfigValid = () => {
     const { selectedQuestions, selectedSubjects, selectedSubtopic } = config;
     const hasSubject = selectedSubjects.length > 0;
@@ -66,7 +75,7 @@ const PracticeConfigInterface = () => {
     // Para otros modos, usar la lógica existente
     const params = new URLSearchParams();
     params.set("mode", mode);
-    params.set("subject", config.selectedSubjects[0] || "");
+    params.set("subject", getSubjects());
     params.set("questions", config.selectedQuestions || "5");
     params.set("timer", config.timerEnabled ? "true" : "false");
     params.set("time", config.selectedTime || "0");
@@ -76,6 +85,8 @@ const PracticeConfigInterface = () => {
       params.set("subtopic", config.selectedSubtopic || "");
     }
 
+    console.log(params.toString())
+    
     router.push(`/practicar?${params.toString()}`);
   };
 
