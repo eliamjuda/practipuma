@@ -8,191 +8,15 @@ import Button from "@/components/ui/buttonPP";
 import { GameModes, PracticeQuestion } from "@/types/practice";
 import { usePracticeParams } from "@/hooks/usePracticeParams";
 import PracticeSummary from "./components/PracticeSummary";
+import { GetQuestionsParams, useQuestions } from "@/hooks/useQuestions";
 
 const LETTERS = ["A", "B", "C", "D"];
 
-// Datos de ejemplo con múltiples preguntas
-const mockQuestions: PracticeQuestion[] = [
-  {
-    question: {
-      question_id: 1,
-      subject: "Matemáticas",
-      subtopic: "Álgebra lineal",
-      statement:
-        "¿Cuál de las siguientes funciones tiene un comportamiento creciente?",
-      explanation:
-        "La respuesta correcta es f(x) = x³, ya que su derivada 3x² es siempre positiva para x ≠ 0.",
-      type: "text",
-    },
-    answers: [
-      {
-        option_id: 1,
-        content: "$ f(x) = \\frac{3}{x} $",
-        is_correct: false,
-        type: "latex",
-      },
-      {
-        option_id: 2,
-        content: "$ f(x) = -3^{-x} $",
-        is_correct: false,
-        type: "latex",
-      },
-      {
-        option_id: 3,
-        content: "$ f(x) = -3x $",
-        is_correct: false,
-        type: "latex",
-      },
-      {
-        option_id: 4,
-        content: "$ f(x) = x^3 $",
-        is_correct: true,
-        type: "latex",
-      },
-    ],
-  },
-  {
-    question: {
-      question_id: 2,
-      subject: "Español",
-      subtopic: "Un subtema bien larguísimo como la UNAM los pone a veces",
-      statement: "¿Cuál es la derivada de f(x) = 2x² + 3x - 1?",
-      explanation:
-        "La derivada se calcula aplicando la regla de la potencia: d/dx(ax^n) = nax^(n-1).",
-      type: "text",
-    },
-    answers: [
-      {
-        option_id: 1,
-        content: "$ f'(x) = 4x + 3 $",
-        is_correct: true,
-        type: "latex",
-      },
-      {
-        option_id: 2,
-        content: "$ f'(x) = 2x + 3 $",
-        is_correct: false,
-        type: "latex",
-      },
-      {
-        option_id: 3,
-        content: "$ f'(x) = 4x² + 3x $",
-        is_correct: false,
-        type: "latex",
-      },
-      {
-        option_id: 4,
-        content: "$ f'(x) = x + 3 $",
-        is_correct: false,
-        type: "latex",
-      },
-    ],
-  },
-  {
-    question: {
-      question_id: 3,
-      subject: "Geografía",
-      subtopic: "Álgebra lineal",
-      statement: "¿Cuál es el límite de (x² - 4)/(x - 2) cuando x tiende a 2?",
-      explanation:
-        "Se puede factorizar el numerador: (x² - 4) = (x + 2)(x - 2), por lo que el límite es 4.",
-      type: "text",
-    },
-    answers: [
-      { option_id: 1, content: "$ 2 $", is_correct: false, type: "latex" },
-      { option_id: 2, content: "$ 4 $", is_correct: true, type: "latex" },
-      { option_id: 3, content: "$ 0 $", is_correct: false, type: "latex" },
-      {
-        option_id: 4,
-        content: "$ \\infty $",
-        is_correct: false,
-        type: "latex",
-      },
-    ],
-  },
-  {
-    question: {
-      question_id: 4,
-      subject: "Literatura",
-      subtopic: "Álgebra lineal",
-      statement:
-        "Fernando António Nogueira Pessoa (Lisboa, 13 de junio de 1888-ibidem, 30 de noviembre de 1935), conocido como Fernando Pessoa, fue un poeta, escritor, crítico literario, dramaturgo, ensayista, traductor, editor y filósofo portugués, descrito como una de las figuras literarias más importantes del siglo XX y uno de los grandes poetas en lengua portuguesa. También tradujo y escribió en inglés y francés. Se le ha llamado el poeta portugués más universal. Por haber sido educado en Sudáfrica, en una escuela católica irlandesa de Durban, llegó a tener más familiaridad con el idioma inglés que con el portugués, escribiendo en tal idioma sus primeros poemas. El crítico literario Harold Bloom consideró a Pessoa como «Whitman renacido»,[8]​ y lo incluyó entre los 26 mejores escritores de la civilización occidental, no solo de la literatura portuguesa sino de la inglesa también. De las cuatro obras que publicó en vida, tres son en lengua inglesa y solo una en portugués, titulada Mensagem. Pessoa tradujo varias obras del inglés al portugués (p. ej., de Shakespeare o Edgar Allan Poe), y del portugués (en particular, de António Botto y José de Almada Negreiros) al inglés y al francés. Pessoa fue un escritor prolífico, y no solo bajo su propio nombre, pues creó aproximadamente otros setenta y cinco, de los cuales destacan los de Alberto Caeiro, Alexander Search, Álvaro de Campos, Bernardo Soares y Ricardo Reis. No los llamaba pseudónimos, pues creía que esta palabra no captaba su verdadera vida intelectual independiente, y en cambio los llamó sus heterónimos. Estas figuras imaginarias a veces mostraban posturas impopulares o extremas. El poeta estadounidense Robert Hass ha dicho al respecto que: «otros modernistas como Yeats, Pound o Elliot inventaban máscaras a través de las cuales hablaban ocasionalmente... Pessoa inventaba poetas enteros». Buscó también inspiraciones en las obras de los poetas William Wordsworth, James Joyce y Walt Whitman.",
-      explanation:
-        "La integral de 3x² es x³ + C, aplicando la regla de integración de potencias.",
-      type: "text",
-    },
-    answers: [
-      {
-        option_id: 1,
-        content:
-          "Fernando Pessoa nació el 13 de junio de 1888 en la capital portuguesa,[a]​ hijo de Joaquim de Seabra Pessoa, de 38 años, funcionario público del Ministerio de Justicia, y crítico musical del periódico Diário de Notícias, y natural de Lisboa",
-        is_correct: false,
-        type: "latex",
-      },
-      {
-        option_id: 2,
-        content:
-          "Fernando Pessoa nació el 13 de junio de 1888 en la capital portuguesa,[a]​ hijo de Joaquim de Seabra Pessoa, de 38 años, funcionario público del Ministerio de Justicia, y crítico musical del periódico Diário de Notícias, y natural de Lisboa",
-        is_correct: true,
-        type: "latex",
-      },
-      {
-        option_id: 3,
-        content:
-          "Fernando Pessoa nació el 13 de junio de 1888 en la capital portuguesa,[a]​ hijo de Joaquim de Seabra Pessoa, de 38 años, funcionario público del Ministerio de Justicia, y crítico musical del periódico Diário de Notícias, y natural de Lisboa",
-        is_correct: false,
-        type: "latex",
-      },
-      {
-        option_id: 4,
-        content:
-          "Fernando Pessoa nació el 13 de junio de 1888 en la capital portuguesa,[a]​ hijo de Joaquim de Seabra Pessoa, de 38 años, funcionario público del Ministerio de Justicia, y crítico musical del periódico Diário de Notícias, y natural de Lisboa",
-        is_correct: false,
-        type: "latex",
-      },
-    ],
-  },
-  {
-    question: {
-      question_id: 5,
-      subject: "Eliam",
-      subtopic: "Álgebra lineal",
-      statement: "¿Qué representa la segunda derivada de una función?",
-      explanation:
-        "La segunda derivada indica la concavidad de la función y los puntos de inflexión.",
-      type: "text",
-    },
-    answers: [
-      {
-        option_id: 1,
-        content: "La pendiente de la función",
-        is_correct: false,
-        type: "text",
-      },
-      {
-        option_id: 2,
-        content: "La concavidad de la función",
-        is_correct: true,
-        type: "text",
-      },
-      {
-        option_id: 3,
-        content: "El área bajo la curva",
-        is_correct: false,
-        type: "text",
-      },
-      {
-        option_id: 4,
-        content: "Los puntos críticos",
-        is_correct: false,
-        type: "text",
-      },
-    ],
-  },
-];
-
 export default function Practicar() {
   const config = usePracticeParams();
+  const { getQuestions, loading, error } = useQuestions();
+
+  // Estados principales
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -203,23 +27,168 @@ export default function Practicar() {
   const [showExplanationModal, setShowExplanationModal] = useState(false);
   const [tiempoFinal, setTiempoFinal] = useState<string | null>(null);
   const [timeExpired, setTimeExpired] = useState(false);
+  const [lives, setLives] = useState(3);
+  
+  // Estados para preguntas - consolidados
+  const [questionsState, setQuestionsState] = useState<{
+    data: PracticeQuestion[];
+    loaded: boolean;
+    configHash: string;
+  }>({
+    data: [],
+    loaded: false,
+    configHash: ''
+  });
+  
+  // Refs
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef(Date.now());
+  const loadingPromiseRef = useRef<Promise<void> | null>(null);
 
-  const [lives, setLives] = useState(3);
+  console.log('Config recibido:', config);
 
-  // Memoizar valores calculados
-  const totalQuestions = useMemo(() => config.questions, [config.questions]);
-  const currentQuestion = useMemo(() => mockQuestions[currentQuestionIndex], [currentQuestionIndex]);
-  const progress = useMemo(() => ((currentQuestionIndex + 1) / totalQuestions) * 100, [currentQuestionIndex, totalQuestions]);
-  
-  // Memoizar el estado de la respuesta correcta
-  const isSelectedCorrect = useMemo(() => 
-    selectedOption !== null ? currentQuestion.answers[selectedOption].is_correct : false,
-    [selectedOption, currentQuestion.answers]
+  // Hash estable de la configuración para evitar re-renders innecesarios
+  const configHash = useMemo(() => {
+    const configObj = {
+      questions: config.questions,
+      mode: config.mode,
+      subjectId: config.subjectId,
+      subtopicId: config.subtopicId,
+      // Convertir arrays a strings ordenados para consistencia
+      subjects: config.subjects ? [...config.subjects].sort().join(',') : null
+    };
+    return JSON.stringify(configObj);
+  }, [config.questions, config.mode, config.subjectId, config.subtopicId, config.subjects]);
+
+  // Cargar preguntas - SOLO cuando cambia el hash de configuración
+  useEffect(() => {
+    // Si ya tenemos las preguntas para esta configuración, no hacer nada
+    if (questionsState.loaded && questionsState.configHash === configHash) {
+      return;
+    }
+
+    // Si ya hay una carga en progreso, cancelarla
+    if (loadingPromiseRef.current) {
+      return; // No iniciar otra carga
+    }
+
+    const loadQuestions = async (): Promise<void> => {
+      try {
+        // Construir parámetros según el modo
+        const params: GetQuestionsParams = {
+          question_count: config.questions,
+          mode: config.mode,
+        };
+
+        // Agregar parámetros específicos según el modo
+        switch (config.mode) {
+          case GameModes.HARDCORE:
+            // Solo necesita subjects
+            params.subjects = config.subjects;
+            break;
+            
+          case GameModes.RANDOM:
+            // Necesita subjects y question_count
+            params.subjects = config.subjects;
+            break;
+            
+          case GameModes.SUBTOPIC:
+            // Necesita subject_id y subtopic_id
+            params.subject_id = config.subjectId;
+            params.subtopic_id = config.subtopicId;
+            break;
+            
+          case GameModes.SUBJECT:
+          default:
+            // Modo por defecto - solo subjects
+            params.subjects = config.subjects;
+            break;
+        }
+
+        console.log('Parámetros enviados a la edge function:', params);
+
+        const result = await getQuestions(params);
+        
+        if (result && result.questions) {
+          setQuestionsState({
+            data: result.questions,
+            loaded: true,
+            configHash
+          });
+        } else {
+          setQuestionsState(prev => ({
+            ...prev,
+            loaded: true,
+            configHash
+          }));
+        }
+      } catch (err) {
+        console.error('Error cargando preguntas:', err);
+        setQuestionsState(prev => ({
+          ...prev,
+          loaded: true,
+          configHash
+        }));
+      } finally {
+        loadingPromiseRef.current = null;
+      }
+    };
+
+    // Resetear estado si cambia la configuración
+    if (questionsState.configHash !== configHash) {
+      setQuestionsState(prev => ({
+        ...prev,
+        data: [],
+        loaded: false,
+        configHash
+      }));
+      
+      // Resetear otros estados relacionados
+      setCurrentQuestionIndex(0);
+      setSelectedOption(null);
+      setConfirmed(false);
+      setPracticeComplete(false);
+      setUserAnswers([]);
+      setTimeExpired(false);
+      setLives(3);
+      startTimeRef.current = Date.now();
+    }
+
+    loadingPromiseRef.current = loadQuestions();
+    
+    return () => {
+      // Cleanup si el componente se desmonta
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, [configHash, config.questions, config.mode, config.subjectId, config.subtopicId, config.subjects, getQuestions, questionsState.loaded, questionsState.configHash]); // SOLO dependemos del hash
+
+  // Valores memoizados
+  const totalQuestions = useMemo(() => 
+    questionsState.loaded ? Math.min(config.questions, questionsState.data.length) : config.questions,
+    [config.questions, questionsState.data.length, questionsState.loaded]
   );
 
-  // Función memoizada para formatear tiempo
+  const currentQuestion = useMemo(() => 
+    questionsState.loaded && questionsState.data.length > 0 ? questionsState.data[currentQuestionIndex] : null,
+    [currentQuestionIndex, questionsState.data, questionsState.loaded]
+  );
+
+  const progress = useMemo(() => 
+    ((currentQuestionIndex + 1) / totalQuestions) * 100,
+    [currentQuestionIndex, totalQuestions]
+  );
+  
+  const isSelectedCorrect = useMemo(() => 
+    selectedOption !== null && currentQuestion 
+      ? currentQuestion.answers[selectedOption].is_correct 
+      : false,
+    [selectedOption, currentQuestion]
+  );
+
+  // Funciones de utilidad - memoizadas para evitar re-renders
   const getFormattedElapsedTime = useCallback((startTime: number) => {
     const elapsed = Math.floor((Date.now() - startTime) / 1000);
     const mins = Math.floor(elapsed / 60);
@@ -231,13 +200,13 @@ export default function Practicar() {
     return getFormattedElapsedTime(startTimeRef.current);
   }, [getFormattedElapsedTime]);
 
-  // Memoizar funciones de manejo de eventos
+  // Manejadores de eventos
   const handleSelect = useCallback((index: number) => {
     if (!confirmed) setSelectedOption(index);
   }, [confirmed]);
 
   const handleConfirm = useCallback(() => {
-    if (selectedOption === null) return;
+    if (selectedOption === null || !currentQuestion) return;
     
     const isCorrect = currentQuestion.answers[selectedOption].is_correct;
     
@@ -268,7 +237,7 @@ export default function Practicar() {
       setSelectedOption(null);
       setConfirmed(false);
     } else {
-       const finalTime = calculateFinalTime();
+      const finalTime = calculateFinalTime();
       setTiempoFinal(finalTime);
       setPracticeComplete(true);
       if (timeoutRef.current) {
@@ -279,9 +248,10 @@ export default function Practicar() {
   }, [currentQuestionIndex, totalQuestions, calculateFinalTime]);
 
   const handleReport = useCallback(() => {
+    if (!currentQuestion) return;
     console.log(`Reportando pregunta ${currentQuestion.question.question_id}`);
     alert("Pregunta reportada. Gracias por tu feedback.");
-  }, [currentQuestion.question.question_id]);
+  }, [currentQuestion]);
 
   const handleTimerExpire = useCallback(() => {
     if (!practiceComplete) {
@@ -298,7 +268,25 @@ export default function Practicar() {
     setShowExplanationModal(prev => !prev);
   }, []);
 
-  // Memoizar textos y variantes del botón
+  // Timer effect - mejorado para evitar memory leaks
+  useEffect(() => {
+    if (!config.timerEnabled || !questionsState.loaded || practiceComplete) return;
+
+    const totalTimeSec = config.selectedTime * 60;
+    const timeoutId = setTimeout(() => {
+      handleTimerExpire();
+    }, totalTimeSec * 1000);
+
+    timeoutRef.current = timeoutId;
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [config.timerEnabled, config.selectedTime, handleTimerExpire, practiceComplete, questionsState.loaded]);
+
+  // Memoizar textos del botón
   const buttonText = useMemo(() => {
     if (!confirmed) return "Confirmar";
     return currentQuestionIndex < totalQuestions - 1 ? "Continuar" : "Finalizar";
@@ -309,21 +297,68 @@ export default function Practicar() {
     [confirmed, isSelectedCorrect]
   );
 
-  // Timer effect (sin cambios, ya está optimizado)
-  useEffect(() => {
-    if (!config.timerEnabled) return;
+  // Función para reintentar carga
+  const handleRetry = useCallback(() => {
+    setQuestionsState({
+      data: [],
+      loaded: false,
+      configHash: ''
+    });
+    loadingPromiseRef.current = null;
+  }, []);
 
-    const totalTimeSec = config.selectedTime * 60;
+  // Renderizado condicional
+  if (loading || !questionsState.loaded) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-lg">Cargando preguntas...</p>
+        </div>
+      </div>
+    );
+  }
 
-    const timeoutId = setTimeout(() => {
-      handleTimerExpire();
-    }, totalTimeSec * 1000);
+  if (error) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center">
+        <div className="text-center text-red-600">
+          <p className="text-lg mb-4">Error al cargar preguntas:</p>
+          <p className="mb-4">{error}</p>
+          <button 
+            onClick={handleRetry}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-    timeoutRef.current = timeoutId;
+  if (questionsState.data.length === 0) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-lg mb-4">No se encontraron preguntas para esta configuración</p>
+          <button 
+            onClick={() => window.history.back()}
+            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+          >
+            Volver
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-    return () => clearTimeout(timeoutId); // prevención estándar
-  }, [config.timerEnabled, config.selectedTime, handleTimerExpire, practiceComplete]);
-
+  if (!currentQuestion) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center">
+        <p>Cargando pregunta...</p>
+      </div>
+    );
+  }
 
   if (practiceComplete) {
     return (
@@ -332,14 +367,12 @@ export default function Practicar() {
         totalQuestions={totalQuestions}
         totalTime={tiempoFinal}
         timeExpired={timeExpired}
-        questions={mockQuestions.slice(
-          0,
-          Math.min(totalQuestions, mockQuestions.length)
-        )}
+        questions={questionsState.data.slice(0, totalQuestions)}
       />
     );
   }
 
+  // Renderizado principal
   return (
     <div className="h-screen w-screen flex flex-col">
       <Header
@@ -349,6 +382,7 @@ export default function Practicar() {
         totalTime={config.selectedTime * 60}
         onTimerExpire={handleTimerExpire}
       />
+      
       <div className="flex-1 overflow-y-auto flex justify-center">
         <div className="w-full md:w-[30%] p-2 md:p-8">
           <ProgressBar
@@ -408,7 +442,7 @@ export default function Practicar() {
       )}
 
       <div className="bg-(--principal-secondary-color) sticky bottom-0 w-full border-t border-(--shadow) min-h-[100px] py-6 flex flex-col justify-center items-center">
-        {/* Iconos de acción - Solo se muestran después de confirmar */}
+        {/* Iconos de acción */}
         {confirmed && (
           <div className="flex gap-6 mb-4">
             <button

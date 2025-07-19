@@ -11,6 +11,33 @@ export const getSubjectById = (id: number): Subject | undefined => {
   return SUBJECTS_CATALOG.find((subject) => subject.id === id);
 };
 
+export const getSubjectIdByName = (name: string | string[]): Subject | undefined => {
+  return SUBJECTS_CATALOG.find((subject) => subject.name === name )
+}
+
+// FUNCION EXCLUSIVA PARA USE QUESTIONS
+export const getSubjectsIdsByName = (name: string | string[]): number | number[] | string | undefined => {
+  if (Array.isArray(name)) {
+    return name
+      .map(n => SUBJECTS_CATALOG.find(subject => subject.name === n)?.id)
+      .filter((id): id is number => id !== undefined); // Filtra los undefined
+  }
+  return name;
+};
+
+export const getSubtopicIdByName = (
+  subjectId: number,
+  subtopicName: string
+): number | undefined => {
+  const subject = getSubjectById(subjectId);
+  const subtopic = subject?.subtopics.find(
+    (s) => s.name.toLowerCase() === subtopicName.toLowerCase()
+  );
+  return subtopic?.id;
+};
+
+
+
 export const getSubjectByName = (name: string): Subject | undefined => {
   return SUBJECTS_CATALOG.find(
     (subject) => subject.name.toLowerCase() === name.toLowerCase()
