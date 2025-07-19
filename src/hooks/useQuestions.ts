@@ -9,13 +9,20 @@ interface GetQuestionsResponse {
   mode: string;
 }
 
-interface GetQuestionsParams {
+export interface GetQuestionsParams {
   subjects?: string[];      // Array de nombres de materias para RANDOM, HARDCORE, SUBJECT
   subject_id?: number;      // ID numérico para SUBTOPIC
-  subtopic_id?: number;     // ID numérico del subtema para SUBTOPIC
+  subtopic_id?: number | null;     // ID numérico del subtema para SUBTOPIC
   question_count: number;
   mode: GameModes;
-  areas?: number[];         // Para modo EXAM (si se usa)
+}
+
+interface EdgeFunctionPayload {
+  question_count: number;
+  mode: GameModes;
+  subjects?: number[];      // Array de IDs numéricos
+  subject_id?: number;      // ID numérico para SUBTOPIC
+  subtopic_id?: number | null;     // ID numérico del subtema para SUBTOPIC
 }
 
 // Singleton para cliente de Supabase - FUERA del hook para evitar recreación
@@ -45,6 +52,7 @@ export const useQuestions = () => {
       // Validaciones específicas por modo
       switch (params.mode) {
         case GameModes.SUBJECT:
+        case GameModes.RECENT:
         case GameModes.HARDCORE:
           if (!params.subjects || params.subjects.length === 0) {
             throw new Error(`El modo ${params.mode} requiere seleccionar al menos una materia`);
@@ -65,12 +73,6 @@ export const useQuestions = () => {
             throw new Error('El modo subtema requiere un ID de subtema válido');
           }
           break;
-          
-        case GameModes.EXAM:
-          if (!params.areas || params.areas.length === 0) {
-            throw new Error('El modo examen requiere seleccionar al menos un área');
-          }
-          break;
       }
     };
   }, []);
@@ -83,7 +85,6 @@ export const useQuestions = () => {
       subtopic_id: params.subtopic_id || null,
       question_count: params.question_count,
       mode: params.mode,
-      areas: params.areas ? [...params.areas].sort() : null,
     };
     return JSON.stringify(key);
   }, []);
@@ -118,7 +119,7 @@ export const useQuestions = () => {
         validateParams(params);
 
         // Preparar payload según el modo
-        const payload: any = {
+        const payload: EdgeFunctionPayload = {
           question_count: params.question_count,
           mode: params.mode,
         };
@@ -128,7 +129,8 @@ export const useQuestions = () => {
           case GameModes.SUBJECT:
           case GameModes.HARDCORE:
           case GameModes.RANDOM:
-            payload.subjects = getSubjectsIdsByName(params.subjects!);
+          case GameModes.RECENT:
+            payload.subjects = getSubjectsIdsByName(params.subjects!) as typeof payload.subjects;
             break;
             
           case GameModes.SUBTOPIC:
@@ -247,7 +249,6 @@ export const useQuestions = () => {
     areas: number[], 
     question_count: number
   ) => getQuestions({
-    areas,
     question_count,
     mode: GameModes.EXAM
   });

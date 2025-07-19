@@ -8,7 +8,7 @@ import Button from "@/components/ui/buttonPP";
 import { GameModes, PracticeQuestion } from "@/types/practice";
 import { usePracticeParams } from "@/hooks/usePracticeParams";
 import PracticeSummary from "./components/PracticeSummary";
-import { useQuestions } from "@/hooks/useQuestions";
+import { GetQuestionsParams, useQuestions } from "@/hooks/useQuestions";
 
 const LETTERS = ["A", "B", "C", "D"];
 
@@ -43,7 +43,7 @@ export default function Practicar() {
   // Refs
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef(Date.now());
-  const loadingPromiseRef = useRef<Promise<any> | null>(null);
+  const loadingPromiseRef = useRef<Promise<void> | null>(null);
 
   console.log('Config recibido:', config);
 
@@ -72,10 +72,10 @@ export default function Practicar() {
       return; // No iniciar otra carga
     }
 
-    const loadQuestions = async () => {
+    const loadQuestions = async (): Promise<void> => {
       try {
         // Construir parámetros según el modo
-        const params: any = {
+        const params: GetQuestionsParams = {
           question_count: config.questions,
           mode: config.mode,
         };
@@ -163,7 +163,7 @@ export default function Practicar() {
         timeoutRef.current = null;
       }
     };
-  }, [configHash]); // SOLO dependemos del hash
+  }, [configHash, config.questions, config.mode, config.subjectId, config.subtopicId, config.subjects, getQuestions, questionsState.loaded, questionsState.configHash]); // SOLO dependemos del hash
 
   // Valores memoizados
   const totalQuestions = useMemo(() => 
