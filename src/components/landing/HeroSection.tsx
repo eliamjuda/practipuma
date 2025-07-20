@@ -35,7 +35,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       <div className="flex-1 order-1 md:order-2 w-full flex justify-center">
-        <div className="w-full max-w-[280px] md:max-w-none">
+        <div className="w-full max-w-[280px] md:max-w-none flex justify-center items-center">
           {visual}
         </div>
       </div>

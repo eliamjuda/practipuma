@@ -1,6 +1,7 @@
 import Footer from "@/components/common/Footer";
 import { Header } from "@/components/common/Header";
 import { PageTransition } from "@/components/common/PageTransitions";
+import RiveAnimation from "@/components/common/RiveAnimation";
 import { FeatureSection } from "@/components/landing/FeatureSection";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { PracticeSection } from "@/components/landing/PracticeSection";
@@ -68,13 +69,9 @@ export default function LandingPage() {
             ctaLabel="Comenzar a practicar"
             // ctaHref="/practice"
             visual={
-              <Image
-                src="/images/illustrations/happyface.png"
-                alt="Aspirante seleccionado"
-                width={400}
-                height={400}
-                className="w-full h-auto"
-              />
+              <div className="w-[300px] h-[300px] lg:w-[450px] lg:h-[450px] lg:my-10">
+                <RiveAnimation/>
+              </div>
             }
           />
           <StatsBanner
