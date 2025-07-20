@@ -9,6 +9,7 @@ import { GameModes, PracticeQuestion } from "@/types/practice";
 import { usePracticeParams } from "@/hooks/usePracticeParams";
 import PracticeSummary from "./components/PracticeSummary";
 import { GetQuestionsParams, useQuestions } from "@/hooks/useQuestions";
+import SkeletonLoader from "./components/SkeletonLoader";
 
 const LETTERS = ["A", "B", "C", "D"];
 
@@ -308,14 +309,9 @@ export default function Practicar() {
   }, []);
 
   // Renderizado condicional
-  if (loading || !questionsState.loaded) {
+  if (loading || !questionsState.loaded ) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-lg">Cargando preguntas...</p>
-        </div>
-      </div>
+      <SkeletonLoader/>
     );
   }
 
