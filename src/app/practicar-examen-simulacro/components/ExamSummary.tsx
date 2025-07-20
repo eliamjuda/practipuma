@@ -354,11 +354,7 @@ export default function ExamSummary({
                                  LETTERS[answerIndex]}
                               </div>
                               <div className={`flex-1 ${textColor}`}>
-                                {answer.type === 'latex' ? (
                                   <ReactKatex>{answer.content}</ReactKatex>
-                                ) : (
-                                  answer.content
-                                )}
                               </div>
                               {isUserSelection && (
                                 <span className={`text-xs font-medium ${textColor}`}>

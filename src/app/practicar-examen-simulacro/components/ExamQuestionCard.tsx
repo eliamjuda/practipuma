@@ -4,6 +4,7 @@ import { ExamQuestion } from "@/types/exam";
 
 interface ExamQuestionCardProps {
   question: ExamQuestion;
+  currentQuestionIndex: number;
   selectedAnswer: number | null;
   onAnswerSelect: (answerIndex: number) => void;
 }
@@ -13,6 +14,7 @@ const LETTERS = ["A", "B", "C", "D"];
 export default function ExamQuestionCard({
   question,
   selectedAnswer,
+  currentQuestionIndex,
   onAnswerSelect
 }: ExamQuestionCardProps) {
   return (
@@ -21,7 +23,7 @@ export default function ExamQuestionCard({
       <div className="mb-4 md:mb-6">
         <div className="flex flex-row gap-2 sm:gap-3 mb-3 md:mb-4">
           <span className="inline-flex items-center px-2 py-1 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-medium bg-(--blue-main) text-white">
-            Pregunta {question.question_id}
+            Pregunta {currentQuestionIndex}
           </span>
           <span className="inline-flex items-center px-2 py-1 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-medium bg-(--principal-secondary-color) text-(--text) border border-(--shadow)">
             {question.subject}

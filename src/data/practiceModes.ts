@@ -6,7 +6,7 @@ export const practiceModesData: PracticeModeProps[] = [
     {
         id: 1,
         mode: "recent",
-        title: "¡Más recientes recientes!",
+        title: "¡Más recientes!",
         description: "¡Practica con las últimas preguntas agregadas!",
         premium: true,
         badge: "2025"
