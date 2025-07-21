@@ -8,15 +8,18 @@ export function useExamParams(): ExamConfig {
   // Obtener el área desde los parámetros de búsqueda
   const areaParam = searchParams.get('area');
   const area: ExamArea = areaParam && ['1', '2', '3', '4'].includes(areaParam) 
-    ? parseInt(areaParam) as ExamArea 
-    : 1; // Default al área 1
+    ? `area${parseInt(areaParam)}` as ExamArea 
+    : `area${1}`; 
 
   // Tiempo límite opcional (en minutos)
   const timeLimitParam = searchParams.get('timeLimit');
   const timeLimit = timeLimitParam ? parseInt(timeLimitParam) : undefined;
 
+  const mode = 'simulacro'
+
   return {
     area,
-    timeLimit
+    timeLimit,
+    mode,
   };
 }

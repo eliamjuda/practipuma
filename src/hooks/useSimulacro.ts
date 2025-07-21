@@ -73,7 +73,7 @@ export const useSimulacro = (): UseSimulacroReturn => {
           // 'Authorization': `Bearer ${userToken}`
         },
         body: JSON.stringify({
-          area: `area${area}`
+          area: area
         })
       });
 
