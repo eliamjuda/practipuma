@@ -6,6 +6,7 @@ import { PracticeCard } from './components/PracticeCard';
 import Button from '@/components/ui/buttonPP';
 import Image from 'next/image';
 import { practiceModesData } from '@/data/practiceModes';
+import { signOut } from '@/lib/auth-actions';
 
 const PracticeDashboard = () => {
   const [isPremium, setIsPremium] = useState(true);
@@ -40,63 +41,6 @@ const PracticeDashboard = () => {
     }
   ];
 
-  // const practiceModesData: PracticeModeCardProps[] = [
-  //   {
-  //     id: 1,
-  //     title: "¡Más recientes recientes!",
-  //     subtitle: "¡Practica con las últimas preguntas agregadas!",
-  //     color: "bg-purple-600",
-  //     image: "/images/illustrations/practica-1.svg",
-  //     badge: "2025",
-  //     premium: true
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Examen simulacro",
-  //     subtitle: "Practica un examen muy parecido al que harás, sin miedo al éxito.",
-  //     color: "bg-purple-800",
-  //     image: "/images/illustrations/practica-2.svg",
-  //     badge: null,
-  //     premium: false
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Materia",
-  //     subtitle: "Practica con una materia de tu elección y domínala 🔥",
-  //     color: "bg-cyan-500",
-  //     image: "/images/illustrations/practica-3.svg",
-  //     badge: null,
-  //     premium: false
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Subtema",
-  //     subtitle: "¿Nos vamos más específico 🎯? Va ",
-  //     image: "/images/illustrations/practica-4.svg",
-  //     color: "bg-pink-400",
-  //     badge: null,
-  //     premium: true
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "Aleatorio",
-  //     subtitle: "Selecciona las materias a practicar y saldrán preguntas aleatorias 🔀",
-  //     color: "bg-teal-600",
-  //     image: "/images/illustrations/practica-5.svg",
-  //     badge: null,
-  //     premium: true
-  //   },
-  //   {
-  //     id: 6,
-  //     title: "Hardcore",
-  //     subtitle: "Como en el minecraft, vidas limitadas, ¡no te equivoques!",
-  //     color: "bg-red-500",
-  //     image: "/images/illustrations/practica-6.svg",
-  //     badge: null,
-  //     premium: true
-  //   }
-  // ];
-
   return (
     <div className="min-h-screen bg-(--principal-main-color) mt-12 p-6">
       <div className="max-w-4xl mx-auto">
@@ -123,6 +67,11 @@ const PracticeDashboard = () => {
                 />
               </button>
               <span className="text-sm span-pp">Premium</span>
+              <form action={signOut}>
+  <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded">
+    Cerrar Sesión
+  </button>
+</form>
             </div>
           </div>
         </div>
