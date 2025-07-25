@@ -1,24 +1,164 @@
+'use client'
+
 import { signUpWithEmail, signInWithGoogle } from '@/lib/auth-actions'
+import { isValidEmail, validatePassword, validateFullName, getPasswordStrengthColor } from '@/lib/auth-utils'
 import { PageTransition } from '@/components/common/PageTransitions'
 import Link from 'next/link'
-import { createClient } from '@/utils/supabase/server'
-import { redirect } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
-export default async function RegisterPage({
-  searchParams,
-}: {
-  searchParams: { message?: string }
-}) {
-    const supabase = await createClient()
-    const params = await searchParams // ← Await aquí
+interface FormErrors {
+  fullName?: string
+  email?: string
+  password?: string
+  general?: string
+}
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+interface FormData {
+  fullName: string
+  email: string
+  password: string
+}
 
-    if (user) {
-      redirect('/dashboard')
+export default function RegisterPage() {
+  const searchParams = useSearchParams()
+  const message = searchParams.get('message')
+  
+  const [formData, setFormData] = useState<FormData>({
+    fullName: '',
+    email: '',
+    password: ''
+  })
+  
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [isLoading, setIsLoading] = useState(false)
+  const [isFormValid, setIsFormValid] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+
+  // Validar formulario completo
+  useEffect(() => {
+    const nameValidation = validateFullName(formData.fullName)
+    const passwordValidation = validatePassword(formData.password)
+    
+    const isValid = 
+      nameValidation.isValid &&
+      isValidEmail(formData.email) &&
+      passwordValidation.isValid &&
+      Object.keys(errors).filter(key => key !== 'general').length === 0
+
+    setIsFormValid(isValid)
+  }, [formData, errors])
+
+  const validateField = (name: string, value: string) => {
+    const newErrors = { ...errors }
+
+    switch (name) {
+      case 'fullName':
+        const nameValidation = validateFullName(value)
+        if (!nameValidation.isValid) {
+          newErrors.fullName = nameValidation.errors[0]
+        } else {
+          delete newErrors.fullName
+        }
+        break
+
+      case 'email':
+        if (!value) {
+          newErrors.email = 'El correo electrónico es requerido'
+        } else if (!isValidEmail(value)) {
+          newErrors.email = 'Ingresa un correo electrónico válido'
+        } else {
+          delete newErrors.email
+        }
+        break
+
+      case 'password':
+        const passwordValidation = validatePassword(value)
+        if (!passwordValidation.isValid) {
+          newErrors.password = passwordValidation.errors[0]
+        } else {
+          delete newErrors.password
+        }
+        break
     }
+
+    setErrors(newErrors)
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+
+    // Limpiar errores generales al escribir
+    if (errors.general) {
+      setErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors.general
+        return newErrors
+      })
+    }
+
+    // Validar en tiempo real después del primer blur
+    if (errors[name as keyof FormErrors] !== undefined) {
+      validateField(name, value)
+    }
+  }
+
+  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    validateField(name, value)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Validar todos los campos antes de enviar
+    validateField('fullName', formData.fullName)
+    validateField('email', formData.email)
+    validateField('password', formData.password)
+
+    if (!isFormValid) {
+      return
+    }
+
+    setIsLoading(true)
+    
+    try {
+      const formDataObj = new FormData()
+      formDataObj.append('fullName', formData.fullName.trim())
+      formDataObj.append('email', formData.email.trim().toLowerCase())
+      formDataObj.append('password', formData.password)
+      
+      await signUpWithEmail(formDataObj)
+    } catch (error) {
+      console.error('Error en registro:', error)
+      setErrors(prev => ({
+        ...prev,
+        general: 'Ocurrió un error inesperado. Inténtalo de nuevo.'
+      }))
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const getInputClassName = (fieldName: keyof FormErrors, hasValue: boolean) => {
+    const baseClass = "w-full px-4 py-3 border rounded-[var(--radius)] bg-[var(--principal-main-color)] text-[var(--text)] focus:outline-none focus:ring-2 focus:border-transparent placeholder:text-[var(--text)] placeholder:opacity-50 transition-all duration-200"
+    
+    if (errors[fieldName]) {
+      return `${baseClass} border-[var(--red-secondary)] focus:ring-[var(--red-secondary)]`
+    }
+    
+    if (hasValue && !errors[fieldName]) {
+      return `${baseClass} border-[var(--green-secondary)] focus:ring-[var(--blue-main)]`
+    }
+    
+    return `${baseClass} border-[var(--shadow)] focus:ring-[var(--blue-main)]`
+  }
+
   return (
     <PageTransition>
       <div className="space-y-6">
@@ -32,10 +172,13 @@ export default async function RegisterPage({
           </p>
         </div>
 
-        {/* Mensaje de error/éxito */}
-        {params?.message && (
-          <div className="bg-[var(--green-main)] border border-[var(--green-secondary)] text-[var(--back-green)] px-4 py-3 rounded-[var(--radius)]">
-            {params.message}
+        {/* Mensaje de error general */}
+        {(message || errors.general) && (
+          <div className="bg-[var(--red-main)] border border-[var(--red-secondary)] text-[var(--back-red)] px-4 py-3 rounded-[var(--radius)] flex items-start gap-3">
+            <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <span>{message || errors.general}</span>
           </div>
         )}
 
@@ -43,10 +186,11 @@ export default async function RegisterPage({
         <form action={signInWithGoogle}>
           <button
             type="submit"
-            className="curspor-pointer w-full bg-(--blue-main) text-white py-3 px-4 rounded-[var(--radius)] 
-                     font-medium hover:bg-(--blue-secondary) transition-colors duration-200
-                     focus:outline-none focus:ring-2 focus:ring-offset-2
-                     flex items-center justify-center gap-2"
+            disabled={isLoading}
+            className="w-full bg-[var(--blue-main)] text-white py-3 px-4 rounded-[var(--radius)] 
+                     font-medium hover:bg-[var(--blue-secondary)] transition-colors duration-200
+                     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--blue-main)]
+                     flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -79,74 +223,190 @@ export default async function RegisterPage({
         </div>
 
         {/* Form de registro */}
-        <form action={signUpWithEmail} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Nombre completo */}
           <div>
             <label htmlFor="fullName" className="block text-sm font-medium text-[var(--text)] mb-1">
               Nombre completo
             </label>
-            <input
-              id="fullName"
-              name="fullName"
-              type="text"
-              placeholder="Tu nombre completo"
-              className="cursor-pointer w-full px-4 py-3 border border-[var(--shadow)] rounded-[var(--radius)] 
-                       bg-[var(--principal-main-color)] text-[var(--text)] 
-                       focus:outline-none focus:ring-2 focus:ring-[var(--blue-main)] focus:border-transparent
-                       placeholder:text-[var(--text)] placeholder:opacity-50"
-              required
-            />
+            <div className="relative">
+              <input
+                id="fullName"
+                name="fullName"
+                type="text"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+                placeholder="Tu nombre completo"
+                className={getInputClassName('fullName', !!formData.fullName)}
+                required
+                disabled={isLoading}
+              />
+              {formData.fullName && !errors.fullName && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <svg className="w-5 h-5 text-[var(--green-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              )}
+            </div>
+            {errors.fullName && (
+              <p className="text-[var(--red-secondary)] text-sm mt-1 flex items-center gap-1">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                {errors.fullName}
+              </p>
+            )}
           </div>
 
+          {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-[var(--text)] mb-1">
               Correo electrónico
             </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="tu@email.com"
-              className="w-full px-4 py-3 border border-[var(--shadow)] rounded-[var(--radius)] 
-                       bg-[var(--principal-main-color)] text-[var(--text)] 
-                       focus:outline-none focus:ring-2 focus:ring-[var(--blue-main)] focus:border-transparent
-                       placeholder:text-[var(--text)] placeholder:opacity-50"
-              required
-            />
+            <div className="relative">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+                placeholder="tu@email.com"
+                className={getInputClassName('email', !!formData.email)}
+                required
+                disabled={isLoading}
+              />
+              {formData.email && !errors.email && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <svg className="w-5 h-5 text-[var(--green-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              )}
+            </div>
+            {errors.email && (
+              <p className="text-[var(--red-secondary)] text-sm mt-1 flex items-center gap-1">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                {errors.email}
+              </p>
+            )}
           </div>
           
+          {/* Contraseña */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-[var(--text)] mb-1">
               Contraseña
             </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="••••••••"
-              className="w-full px-4 py-3 border border-[var(--shadow)] rounded-[var(--radius)] 
-                       bg-[var(--principal-main-color)] text-[var(--text)] 
-                       focus:outline-none focus:ring-2 focus:ring-[var(--blue-main)] focus:border-transparent
-                       placeholder:text-[var(--text)] placeholder:opacity-50"
-              required
-              minLength={6}
-            />
-            <p className="text-xs text-[var(--text)] opacity-50 mt-1">Mínimo 6 caracteres</p>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+                placeholder="••••••••"
+                className={getInputClassName('password', !!formData.password)}
+                required
+                minLength={6}
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text)] opacity-50 hover:opacity-70"
+              >
+                {showPassword ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                )}
+              </button>
+            </div>
+            
+            {/* Indicador de fortaleza de contraseña */}
+            {formData.password && (
+              <div className="mt-2">
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4].map((level) => {
+                    const passwordValidation = validatePassword(formData.password)
+                    const strength = passwordValidation.strength
+                    
+                    let isActive = false
+                    if (strength === 'fair' && level <= 1) isActive = true
+                    if (strength === 'good' && level <= 2) isActive = true
+                    if (strength === 'strong' && level <= 4) isActive = true
+                    
+                    return (
+                      <div
+                        key={level}
+                        className="h-1 w-1/4 rounded-full transition-colors"
+                        style={{
+                          backgroundColor: isActive ? getPasswordStrengthColor(strength) : 'var(--shadow)'
+                        }}
+                      />
+                    )
+                  })}
+                </div>
+                <p className="text-xs text-[var(--text)] opacity-50 mt-1">
+                  {(() => {
+                    const validation = validatePassword(formData.password)
+                    if (validation.strength === 'weak') {
+                      return 'Muy débil - Agrega más caracteres'
+                    } else if (validation.strength === 'fair') {
+                      return 'Débil - Agrega números y símbolos'
+                    } else if (validation.strength === 'good') {
+                      return 'Buena - Considera agregar símbolos'
+                    } else {
+                      return 'Excelente - Contraseña muy segura'
+                    }
+                  })()}
+                </p>
+              </div>
+            )}
+            
+            {errors.password && (
+              <p className="text-[var(--red-secondary)] text-sm mt-1 flex items-center gap-1">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                {errors.password}
+              </p>
+            )}
           </div>
           
           <button
             type="submit"
-            className="cursor-pointer w-full bg-(--blue-main) text-white py-3 px-4 rounded-[var(--radius)] 
-                     font-medium hover:bg-(--blue-secondary) transition-colors duration-200
-                     focus:outline-none "
+            disabled={!isFormValid || isLoading}
+            className="w-full bg-[var(--blue-main)] text-white py-3 px-4 rounded-[var(--radius)] 
+                     font-medium hover:bg-[var(--blue-secondary)] transition-all duration-200
+                     focus:outline-none focus:ring-2 focus:ring-[var(--blue-main)] focus:ring-offset-2
+                     disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Crear Cuenta
+            {isLoading ? (
+              <>
+                <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                Creando cuenta...
+              </>
+            ) : (
+              'Crear Cuenta'
+            )}
           </button>
         </form>
 
         {/* Sign in link */}
         <div className="text-center">
           <span className="text-[var(--text)] opacity-70">¿Ya tienes cuenta? </span>
-          <Link href={"/auth/login"} className="text-[var(--blue-main)] hover:underline font-medium">
+          <Link href="/auth/login" className="text-[var(--blue-main)] hover:underline font-medium">
             Inicia sesión aquí
           </Link>
         </div>
