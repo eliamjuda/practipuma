@@ -1,5 +1,5 @@
 'use client'
-
+export const runtime = 'edge';
 import { PageTransition } from "@/components/common/PageTransitions"
 import { getEmailProvider } from '@/lib/auth-utils'
 import Link from "next/link"

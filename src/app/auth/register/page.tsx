@@ -1,5 +1,5 @@
 'use client'
-
+export const runtime = 'edge';
 import { signUpWithEmail, signInWithGoogle } from '@/lib/auth-actions'
 import { isValidEmail, validatePassword, validateFullName, getPasswordStrengthColor } from '@/lib/auth-utils'
 import { PageTransition } from '@/components/common/PageTransitions'

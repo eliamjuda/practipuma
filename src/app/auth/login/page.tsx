@@ -1,5 +1,5 @@
 'use client'
-
+export const runtime = 'edge';
 import { createClient } from '@/utils/supabase/client'
 import { signInWithEmail, signInWithGoogle } from "@/lib/auth-actions"
 import { PageTransition } from "@/components/common/PageTransitions"
