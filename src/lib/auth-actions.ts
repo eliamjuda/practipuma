@@ -148,24 +148,6 @@ export async function signUpWithEmail(formData: FormData) {
   redirect(`/auth/confirm?email=${encodeURIComponent(email)}`)
 }
 
-export async function signOut() {
-  const supabase = await createClient()
-  
-  try {
-    const { error } = await supabase.auth.signOut()
-    
-    if (error) {
-      console.error('Error cerrando sesión:', error)
-    }
-    
-  } catch (error) {
-    console.error('Error inesperado cerrando sesión:', error)
-  } finally {
-    revalidatePath('/', 'layout')
-    redirect('/auth/login')
-  }
-}
-
 export async function signInWithGoogle() {
   const supabase = await createClient()
 
