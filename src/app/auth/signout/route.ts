@@ -1,4 +1,5 @@
-// app/auth/signout/route.ts
+export const runtime = 'edge';
+
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { type NextRequest, NextResponse } from 'next/server'
