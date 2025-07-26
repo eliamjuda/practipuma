@@ -6,10 +6,11 @@ import { PracticeCard } from './components/PracticeCard';
 import Button from '@/components/ui/buttonPP';
 import Image from 'next/image';
 import { practiceModesData } from '@/data/practiceModes';
-import { signOut } from '@/lib/auth-actions';
+import { useUser } from '@/context/userContext';
 
 const PracticeDashboard = () => {
   const [isPremium, setIsPremium] = useState(true);
+  const { firstName, isLoading } = useUser();
 
   const practiceData = [
     {
@@ -48,7 +49,9 @@ const PracticeDashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="mb-2">Hola, <span className="span-pp font-semibold">Eliam</span></p>
+              <p className="mb-2">Hola, <span className="span-pp font-semibold">
+                  {isLoading ? '...' : firstName}
+                </span></p>
               <h1 className="text-2xl md:text-3xl font-bold">¡Comencemos a practicar! 😎</h1>
             </div>
             
@@ -67,11 +70,6 @@ const PracticeDashboard = () => {
                 />
               </button>
               <span className="text-sm span-pp">Premium</span>
-              <form action={signOut}>
-  <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded">
-    Cerrar Sesión
-  </button>
-</form>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { Baloo_Bhaijaan_2 } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import "katex/dist/katex.min.css";
+import { UserProvider } from "@/context/userContext";
 
 
 const baloo = Baloo_Bhaijaan_2({
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="es-MX" suppressHydrationWarning>
       <body className={`${baloo.variable} ${baloo.variable} antialiased`}>
+        <UserProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -33,6 +35,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+        </UserProvider>
       </body>
     </html>
   );
