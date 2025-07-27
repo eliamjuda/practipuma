@@ -40,7 +40,6 @@ export async function signInWithEmail(formData: FormData) {
 
   // Verificar que el usuario esté confirmado
   if (data.user && !data.user.email_confirmed_at) {
-    console.log('⚠️ Usuario no confirmado, cerrando sesión')
     await supabase.auth.signOut()
     redirect(`/auth/login?message=${encodeURIComponent('Debes confirmar tu email antes de iniciar sesión. Revisa tu bandeja de entrada.')}`)
   }
@@ -50,8 +49,6 @@ export async function signInWithEmail(formData: FormData) {
     redirect(`/auth/login?message=${encodeURIComponent('Error al crear sesión. Inténtalo de nuevo.')}`)
   }
 
-  console.log('✅ Login exitoso:', data.user.email)
-  
   revalidatePath('/', 'layout')
   redirect('/dashboard?sync=true')
 }
@@ -64,8 +61,6 @@ export async function signUpWithEmail(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const fullName = formData.get('fullName') as string
-
-  console.log('🔄 Intentando registrar usuario:', email)
 
   // Validaciones del servidor
   if (!email || !password || !fullName) {
@@ -128,7 +123,6 @@ export async function signUpWithEmail(formData: FormData) {
   // Verificar casos especiales de registro
   if (data.user && !data.user.email_confirmed_at && data.session) {
     // Usuario ya existía y se logueó automáticamente
-    console.log('⚠️ Usuario ya existía - cerrando sesión y mostrando mensaje')
     await supabase.auth.signOut()
     redirect(`/auth/register?message=${encodeURIComponent('Este correo ya está registrado. ¿Ya tienes una cuenta? Inicia sesión en su lugar.')}`)
   }
@@ -137,9 +131,6 @@ export async function signUpWithEmail(formData: FormData) {
     console.error('❌ No se pudo crear el usuario')
     redirect(`/auth/register?message=${encodeURIComponent('Error al crear la cuenta. Inténtalo de nuevo.')}`)
   }
-
-  console.log('✅ Usuario registrado exitosamente:', data.user.email)
-  console.log('📧 Estado de confirmación:', data.user.email_confirmed_at ? 'Ya confirmado' : 'Pendiente de confirmación')
 
   // Redirigir a página de confirmación con el email
   redirect(`/auth/confirm?email=${encodeURIComponent(email)}`)
