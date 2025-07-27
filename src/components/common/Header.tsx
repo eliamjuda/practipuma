@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ThemeToggle } from "../ui/ThemeToggle";
-import { useUser } from "@/context/userContext";
+import { useUser } from "@/hooks/useUser";
 
 interface HeaderProps {
   className?: string;
@@ -76,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({ className = "" }) => {
           onError={(e) => {
             e.currentTarget.style.display = 'none';
             if (e.currentTarget.parentElement) {
-              e.currentTarget.parentElement.textContent = initials;
+              e.currentTarget.parentElement.textContent = initials!;
             }
           }}
         />

@@ -6,7 +6,7 @@ import { PracticeCard } from './components/PracticeCard';
 import Button from '@/components/ui/buttonPP';
 import Image from 'next/image';
 import { practiceModesData } from '@/data/practiceModes';
-import { useUser } from '@/context/userContext';
+import { useUser } from '@/hooks/useUser';
 
 const PracticeDashboard = () => {
   const [isPremium, setIsPremium] = useState(true);
