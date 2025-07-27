@@ -1,4 +1,4 @@
-import { useUser } from "@/context/userContext"
+import { useUser } from "@/hooks/useUser"
 
 export const useUserGreeting = () => {
   const { firstName, isLoading } = useUser()
