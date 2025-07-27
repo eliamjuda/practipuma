@@ -13,27 +13,24 @@ export async function POST(req: NextRequest) {
   } = await supabase.auth.getUser()
 
   if (user) {
-    console.log('🔄 Cerrando sesión para usuario:', user.email)
     const { error } = await supabase.auth.signOut()
     
     if (error) {
-      console.error('❌ Error cerrando sesión:', error)
       return NextResponse.json(
         { error: 'Error al cerrar sesión' }, 
         { status: 500 }
       )
     }
     
-    console.log('✅ Sesión cerrada exitosamente')
   } else {
-    console.log('⚠️ No hay usuario logueado para cerrar sesión')
+    console.warn('No hay usuario logueado para cerrar sesión')
   }
 
   // Revalidar el layout para limpiar el estado de autenticación
   revalidatePath('/', 'layout')
   
   // Redirigir a la página de login
-  return NextResponse.redirect(new URL('/auth/login', req.url), {
+  return NextResponse.redirect(new URL('/', req.url), {
     status: 302,
   })
 }

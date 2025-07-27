@@ -1,8 +1,8 @@
-// /contexts/UserContext.tsx
 'use client'
 
 import * as React from 'react'
 import { createClient } from '@/utils/supabase/client'
+import { useSearchParams } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 
 interface UserContextType {
@@ -59,42 +59,68 @@ const getInitials = (user: User | null): string => {
   return 'U'
 }
 
-interface UserProviderProps {
-  children: React.ReactNode
-}
-
-export const UserProvider: React.FC<UserProviderProps> = (props) => {
-  const [user, setUser] = React.useState<User | null>(null)
-  const [isLoading, setIsLoading] = React.useState<boolean>(true)
-
-  const refreshUser = React.useCallback(async (): Promise<void> => {
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    setUser(user)
-  }, [])
+function useAuthSync() {
+  const searchParams = useSearchParams()
+  const [shouldRefresh, setShouldRefresh] = React.useState(false)
 
   React.useEffect(() => {
-    const supabase = createClient()
+    const shouldSync = searchParams.get('sync') === 'true'
     
-    const getInitialUser = async (): Promise<void> => {
+    if (shouldSync) {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('sync')
+      window.history.replaceState({}, '', url.toString())
+      
+      setShouldRefresh(true)
+    }
+  }, [searchParams])
+
+  return shouldRefresh
+}
+
+interface UserProviderProps {
+  children: React.ReactNode
+  initialUser?: User | null
+}
+
+export const UserProvider: React.FC<UserProviderProps> = ({ 
+  children, 
+  initialUser = null 
+}) => {
+  const [user, setUser] = React.useState<User | null>(initialUser)
+  const [isLoading, setIsLoading] = React.useState(!initialUser)
+  
+  const supabase = React.useMemo(() => createClient(), [])
+  const shouldRefresh = useAuthSync()
+
+  const refreshUser = React.useCallback(async (): Promise<void> => {
+    try {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
+    } catch (error) {
+      console.error('Error al refrescar el usuario:', error)
+      setUser(null)
+    } finally {
       setIsLoading(false)
     }
+  }, [supabase])
 
-    getInitialUser()
+  React.useEffect(() => {
+    if (shouldRefresh) {
+      refreshUser()
+    }
+  }, [shouldRefresh, refreshUser])
 
+  React.useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         setUser(session?.user ?? null)
         setIsLoading(false)
       }
     )
 
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [])
+    return () => subscription.unsubscribe()
+  }, [supabase])
 
   const contextValue: UserContextType = React.useMemo(() => ({
     user,
@@ -109,6 +135,7 @@ export const UserProvider: React.FC<UserProviderProps> = (props) => {
   return React.createElement(
     UserContext.Provider,
     { value: contextValue },
-    props.children
+    children
   )
 }
+

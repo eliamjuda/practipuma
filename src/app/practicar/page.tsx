@@ -46,8 +46,6 @@ export default function Practicar() {
   const startTimeRef = useRef(Date.now());
   const loadingPromiseRef = useRef<Promise<void> | null>(null);
 
-  console.log('Config recibido:', config);
-
   // Hash estable de la configuración para evitar re-renders innecesarios
   const configHash = useMemo(() => {
     const configObj = {
@@ -105,8 +103,6 @@ export default function Practicar() {
             params.subjects = config.subjects;
             break;
         }
-
-        console.log('Parámetros enviados a la edge function:', params);
 
         const result = await getQuestions(params);
         

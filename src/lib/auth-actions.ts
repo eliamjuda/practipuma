@@ -10,8 +10,6 @@ export async function signInWithEmail(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  console.log('🔄 Intentando login:', email)
-
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -49,14 +47,13 @@ export async function signInWithEmail(formData: FormData) {
 
   // Verificar que realmente tengamos un usuario válido
   if (!data.user || !data.session) {
-    console.log('❌ No se pudo crear sesión válida')
     redirect(`/auth/login?message=${encodeURIComponent('Error al crear sesión. Inténtalo de nuevo.')}`)
   }
 
   console.log('✅ Login exitoso:', data.user.email)
   
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  redirect('/dashboard?sync=true')
 }
 
 

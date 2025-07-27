@@ -85,8 +85,6 @@ const PracticeConfigInterface = () => {
       params.set("subtopic", config.selectedSubtopic || "");
     }
 
-    console.log(params.toString())
-    
     router.push(`/practicar?${params.toString()}`);
   };
 
