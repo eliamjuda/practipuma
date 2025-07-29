@@ -23,7 +23,6 @@ const PoliticaPrivacidad = () => {
               <h3 className="text-lg font-semibold mb-3">Responsable del Tratamiento:</h3>
               <p>Domicilio: Magdalena de las Salinas, 07760 Mexico City, CDMX</p>
               <p>Email de contacto: practipuma@gmail.com</p>
-              <p>Teléfono: +52 7351272168</p>
             </div>
           </section>
 
